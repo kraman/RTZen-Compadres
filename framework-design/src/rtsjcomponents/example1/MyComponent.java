@@ -8,6 +8,10 @@ import rtsjcomponents.Context;
  */
 public class MyComponent implements rtsjcomponents.ActiveComponent
 {
+    
+    public static final String ITER_STR = "iter_base";
+    public static final int ITER_MULTIPLIER = 100;
+    
     int iter = 0;
 
     Context ctx = null;
@@ -16,7 +20,7 @@ public class MyComponent implements rtsjcomponents.ActiveComponent
     {
         // System.out.println("MyComponent.init()");
         this.ctx = ctx;
-        this.iter = this.ctx.getLocalInt("iter");
+        this.iter = this.ctx.getLocalInt(ITER_STR) * ITER_MULTIPLIER;
     }
 
     public void execute()

@@ -2,6 +2,7 @@ package rtsjcomponents.utils;
 
 /**
  * Collection of constant exceptions created in immortal memory.
+ * @author juancol
  */
 public class Exceptions
 {
@@ -10,4 +11,5 @@ public class Exceptions
     
     public static final IllegalArgumentException ILLEGAL_ARGUMENT_EXCEPTION
         = new IllegalArgumentException();   
+    
 }

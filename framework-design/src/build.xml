@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<project name="Framework design and test" default="default">
+    <description>
+    	This project includes a set of classes that recreate (as a first 
+        approximation) the RTSJ Component Framework of the COMPADRES project.
+    </description>
+
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="depends" description="">
+        
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: depends                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="depends">
+    </target>
+
+</project>
+

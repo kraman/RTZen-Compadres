@@ -64,8 +64,8 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
         {
 /*        case INIT_OP:
             this.init();
-            break;
-*/        case CREATE_COMP_OP:
+            break;*/      
+        case CREATE_COMP_OP:
             this.createActiveComponent();
             break;
         case TERMINATE_OP:

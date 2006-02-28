@@ -14,7 +14,6 @@ import javax.realtime.ScopedMemory;
 import javax.realtime.SporadicParameters;
 
 import rtsjcomponents.ActiveComponent;
-import rtsjcomponents.ContextImpl;
 import rtsjcomponents.utils.ExecuteInRunnable;
 
 /**
@@ -50,6 +49,7 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
     private RelativeTime minInterarrival;
     private MemoryParameters memory;
     private Class componentClass;
+    private int id;
     
     private Throwable t = null;
     
@@ -146,7 +146,7 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
 
     void prepareForCreatePeriodicComponent(final PriorityParameters scheduling, 
             final RelativeTime start, final RelativeTime period, final RelativeTime cost,
-            final RelativeTime deadline, final MemoryParameters memory, final Class componentClass)    
+            final RelativeTime deadline, final MemoryParameters memory, final Class componentClass, final int id)    
     {
         this.operation = CREATE_COMP_OP;
         this.activeComponentType = PERIODIC;
@@ -157,11 +157,12 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
         this.deadline = deadline;
         this.memory = memory;
         this.componentClass = componentClass;
+        this.id = id;
     }
     
     void prepareForCreateAperiodicComponent(final PriorityParameters scheduling, 
             final RelativeTime cost, final RelativeTime deadline, final MemoryParameters memory, 
-            final Class componentClass)    
+            final Class componentClass, final int id)    
     {
         this.operation = CREATE_COMP_OP;
         this.activeComponentType = APERIODIC;
@@ -170,11 +171,12 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
         this.deadline = deadline;
         this.memory = memory;
         this.componentClass = componentClass;
+        this.id = id;
     }
     
     void prepareForCreateSporadicComponent(final PriorityParameters scheduling, 
             final RelativeTime minInterarrival, final RelativeTime cost, final RelativeTime deadline, 
-            final MemoryParameters memory, final Class componentClass)    
+            final MemoryParameters memory, final Class componentClass, final int id)    
     {
         this.operation = CREATE_COMP_OP;
         this.activeComponentType = SPORADIC;
@@ -184,6 +186,7 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
         this.deadline = deadline;
         this.memory = memory;
         this.componentClass = componentClass;
+        this.id = id;
     }
     
     /**
@@ -257,7 +260,9 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
                                          null, 
                                          componentRunnable);
             //System.out.println("here 14");
-            comp.init(new ContextImpl()); //TODO Implement EnvironmentImpl class.      
+//          
+            // TODO specific ContextImpl class for experiment (hardcoded).
+            comp.init(new rtsjcomponents.example1.ContextImpl(this.id));       
             // System.out.println("here 15");
             periodicThread.start();
             // System.out.println("here 16");
@@ -329,6 +334,7 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
         this.memory = null;
         this.componentClass = null;
         this.t = null;
+        this.id = Integer.MIN_VALUE;
     }
     
     

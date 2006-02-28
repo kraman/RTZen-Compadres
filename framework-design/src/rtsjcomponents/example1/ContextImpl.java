@@ -1,12 +1,23 @@
-package rtsjcomponents;
+package rtsjcomponents.example1;
 
+import rtsjcomponents.utils.Exceptions;
 
 /**
  * @author juancol
  */
-public class ContextImpl implements Context
+public class ContextImpl implements rtsjcomponents.Context
 {
+    private int id = Integer.MIN_VALUE;
 
+    public ContextImpl(final int id)
+    {
+        if (id < 0)
+            throw Exceptions.ILLEGAL_ARGUMENT_EXCEPTION;
+
+        this.id = id;
+    }
+    
+    
     public Object getComponent(String name)
     {
         // TODO Auto-generated method stub

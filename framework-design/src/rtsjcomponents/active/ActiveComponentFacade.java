@@ -81,7 +81,7 @@ public class ActiveComponentFacade
     
     public void createPeriodicComponent(final PriorityParameters scheduling, 
             final RelativeTime start, final RelativeTime period, final RelativeTime cost,
-            final RelativeTime deadline, final MemoryParameters memory, final Class componentClass) 
+            final RelativeTime deadline, final MemoryParameters memory, final Class componentClass, final int id) 
     {
         // TODO Complete validation input parameters
         
@@ -97,7 +97,7 @@ public class ActiveComponentFacade
                    new ActiveComponentCrossScopeInvocationRunnable();
                  
                crossScopeInvocator.prepareForCreatePeriodicComponent(scheduling, start, period, 
-                       cost, deadline, memory, componentClass); // key method
+                       cost, deadline, memory, componentClass, id); // key method
                
                executeInArea(crossScopeInvocator, workingScope, true);               
                
@@ -110,7 +110,7 @@ public class ActiveComponentFacade
 
     public void createAperiodicComponent(final PriorityParameters scheduling, 
             final RelativeTime cost, final RelativeTime deadline, final MemoryParameters memory, 
-            final Class componentClass) 
+            final Class componentClass, final int key) 
     {
         // TODO Complete validation input parameters
         
@@ -126,7 +126,7 @@ public class ActiveComponentFacade
                    new ActiveComponentCrossScopeInvocationRunnable();
                  
                crossScopeInvocator.prepareForCreateAperiodicComponent(scheduling, cost, deadline,
-                       memory, componentClass); // key method
+                       memory, componentClass, key); // key method
                
                executeInArea(crossScopeInvocator, workingScope, true);               
            }
@@ -141,7 +141,7 @@ public class ActiveComponentFacade
     
     public void createSporadicComponent(final PriorityParameters scheduling, 
             final RelativeTime minInterarrival, final RelativeTime cost, final RelativeTime deadline, 
-            final MemoryParameters memory, final Class componentClass) 
+            final MemoryParameters memory, final Class componentClass, final int key) 
     {
         
         // TODO Complete validation input parameters
@@ -158,7 +158,7 @@ public class ActiveComponentFacade
                    new ActiveComponentCrossScopeInvocationRunnable();
                  
                crossScopeInvocator.prepareForCreateSporadicComponent(scheduling, minInterarrival, 
-                     cost, deadline, memory, componentClass); // key method
+                     cost, deadline, memory, componentClass, key); // key method
                
                executeInArea(crossScopeInvocator, workingScope, true);               
            }

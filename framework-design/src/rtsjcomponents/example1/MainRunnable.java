@@ -52,7 +52,7 @@ public class MainRunnable implements Runnable
                 new MemoryParameters(MemoryParameters.NO_MAX, MemoryParameters.NO_MAX);
             
             facades[i].createPeriodicComponent(priorityParams, start, period, cost, 
-                    deadline, memoryParams, MyComponent.class, num);
+                    deadline, memoryParams, MyComponent.class, i);
         }
         
         return facades;

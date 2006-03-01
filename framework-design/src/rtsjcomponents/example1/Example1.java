@@ -22,6 +22,9 @@ public class Example1 extends RealtimeThread
             RealtimeThread rtt = (RealtimeThread) imm.newInstance(Example1.class);
             rtt.start();
             rtt.join();
+
+	    // Write time measurements into a log
+            MyComponent.logRecords();
             System.out.println("Everything is OK");
             System.exit(0);
         }

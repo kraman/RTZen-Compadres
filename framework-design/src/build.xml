@@ -5,7 +5,7 @@
         approximation) the RTSJ Component Framework of the COMPADRES project.
     </description>
 
-    <property name="home" location="/home/shruti"/>
+    <property name="home" location="/home/shruti/test"/>
     <property name="project" location="${home}/compadres/framework-design"/>
     <property name="src" location="${project}/src"/>
     <property name="bin" location="${project}/bin"/>

@@ -16,8 +16,8 @@ import rtsjcomponents.utils.Constants;
  */
 public class MainRunnable implements Runnable
 {    
-    public static final int BASE_PERIOD = 3;
-    public static final int BASE_DEADLINE = 3;
+    public static final int BASE_PERIOD = 3000;
+    public static final int BASE_DEADLINE = 3000;
     public static final int NUM_OF_ACTIVE_COMPONENTS = 5;  
     
     /**

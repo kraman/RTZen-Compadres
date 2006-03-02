@@ -5,7 +5,7 @@
         approximation) the RTSJ Component Framework of the COMPADRES project.
     </description>
 
-    <property name="project" location="../."/>
+    <property name="project" location="."/>
     <property name="src" location="${project}/src"/>
     <property name="bin" location="${project}/bin"/>
     <property name="rtsj-lib" location="/opt/timesys/rtsj-ri/lib/foundation.jar"/>

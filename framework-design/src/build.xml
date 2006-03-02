@@ -5,36 +5,34 @@
         approximation) the RTSJ Component Framework of the COMPADRES project.
     </description>
 
-    <property name="home" location="/home/shruti/test"/>
-    <property name="project" location="${home}/compadres/framework-design"/>
+    <property name="project" location="../."/>
     <property name="src" location="${project}/src"/>
     <property name="bin" location="${project}/bin"/>
-    <property name="rtsj-lib" location="/opt/timesys/rtsj-ri/lib"/>
-    <!-- ================================= 
-          target: default              
-         ================================= -->
-    <target name="default" depends="depends" description="Compile all examples">
-       <!--make bin dir--> 
+    <property name="rtsj-lib" location="/opt/timesys/rtsj-ri/lib/foundation.jar"/>
+	
+	<!-- target: default -->
+    <target name="default" depends="" description="Compile all examples">
        <mkdir dir="${project}/bin"/>
        <javac srcdir="${src}"
-	      destdir="${bin}"
-              classpath="${rtsj-lib}/foundation.jar"
-              debug="on"
+ 	          destdir="${bin}"
+              classpath="${rtsj-lib}"
+       	      debug="on"
               source="1.3"
               target="1.3"
         />
     </target>
 
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: depends                      
-         - - - - - - - - - - - - - - - - - -->
-    <target name="depends">
-    </target>
-
-    <target name="run" depends="default" description="Run Example 1">
-       <!---DOES NOT YET WORK-->
-	<exec executable="/opt/timesys/rtsj-ri/bin/tjvm  -Djava.class.path=/home/shruti/compadres/framework-design/bin -Xbootclasspath=/opt/timesys/rtsj-ri/lib/foundation.jar rtsjcomponents.example1.Example1">
+	<!-- target: default -->
+    <target name="clean" depends="" description="Delete class files">
+       <delete dir="${project}/bin"/>
+    </target>	
+	
+    <!--  target: run >
+    <target name="run-Ex1"  description="Run Example 1">
+    	<exec executable="/opt/timesys/rtsj-ri/bin/tjvm  
+    	-Djava.class.path=/home/shruti/compadres/framework-design/bin -Xbootclasspath=${rtsj-lib}/foundation.jar
+    		rtsjcomponents.example1.Example1">
         </exec>
-    </target>
+    </target-->
 </project>
 

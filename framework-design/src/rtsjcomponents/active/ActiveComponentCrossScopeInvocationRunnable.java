@@ -264,6 +264,7 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
             // TODO specific ContextImpl class for experiment (hardcoded).
             comp.init(new rtsjcomponents.example1.ContextImpl(this.id));       
             // System.out.println("here 15");
+            periodicThread.setDaemon(false);
             periodicThread.start();
             // System.out.println("here 16");
             

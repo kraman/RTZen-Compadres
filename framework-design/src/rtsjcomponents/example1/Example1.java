@@ -20,6 +20,7 @@ public class Example1 extends RealtimeThread
             System.out.println("Example1 starting ...");
             ImmortalMemory imm = ImmortalMemory.instance();
             RealtimeThread rtt = (RealtimeThread) imm.newInstance(Example1.class);
+            rtt.setDaemon(false);
             rtt.start();
             rtt.join();
 

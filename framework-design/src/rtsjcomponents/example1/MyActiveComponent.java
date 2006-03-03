@@ -72,13 +72,13 @@ public class MyActiveComponent implements rtsjcomponents.ActiveComponent {
     }
 
     public void terminate() {
-        //System.out.println("MyComponent.terminate()");
+        // System.out.println("MyComponent.terminate()");
         // Write time measurements into a log
         this.logRecords();
 
     }
 
-    public void logRecords() {
+    private void logRecords() {
         //System.out.println ("Saving timestamps in a file ...");
         try {
             PrintWriter file = new PrintWriter(new FileOutputStream(

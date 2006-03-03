@@ -69,17 +69,19 @@ public class MainRunnable implements Runnable
         {
             facades = this.createActiveComponents(NUM_OF_ACTIVE_COMPONENTS);            
             RealtimeThread.sleep(20 * Constants.A_SECOND);
+        
+            for (int i = 0; i < facades.length; i++) {
+               ActiveComponentFacade.freeInstance(facades[i]);
+            }
+
+            // During this time we let the components terminate. 
+            // We had to do this because of a Timesys RTSJ-RI's bug.
+            RealtimeThread.sleep(20 * Constants.A_SECOND);
         }
         catch (Exception e)
         {
             e.printStackTrace();
             System.exit(-1);
         }
-        finally
-        {
-            for (int i = 0; i < facades.length; i++) {
-                ActiveComponentFacade.freeInstance(facades[i]);
-            }
-        }       
     }
 }

@@ -14,14 +14,11 @@ import java.io.PrintWriter;
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
 
-import rtsjcomponents.utils.Constants;
-
 /**
  * A simple example of a periodic component.
- * 
  * @author juancol
  */
-public class MyActiveComponent implements rtsjcomponents.ActiveComponent {
+public class MyAC implements rtsjcomponents.ActiveComponent {
     
     public static final String ITER_STR = "iter_base";
     public static final int ITER_MULTIPLIER = 10;
@@ -60,7 +57,7 @@ public class MyActiveComponent implements rtsjcomponents.ActiveComponent {
 
         Clock.getRealtimeClock().getTime(at);
         long t0 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
-        MyActiveComponent.doWork(this.iter);
+        MyAC.doWork(this.iter);
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         if (counter <= MEASUREMENTS) {
@@ -92,10 +89,14 @@ public class MyActiveComponent implements rtsjcomponents.ActiveComponent {
         }
     }
 
-    public static void doWork(int j) {
+    public static int doWork(int j) {
+        int x = 0;
+
         for (int m = 0; m < j; m++) {
-            int x = j * j;
+            x = j * j;
         }
+        
+        return x;
     }
 
 }

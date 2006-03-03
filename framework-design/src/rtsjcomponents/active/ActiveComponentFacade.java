@@ -15,6 +15,7 @@ import javax.realtime.SporadicParameters;
 
 import rtsjcomponents.utils.Constants;
 import rtsjcomponents.utils.ExecuteInRunnable;
+import rtsjcomponents.utils.ExecutorInArea;
 import rtsjcomponents.utils.Queue;
 import rtsjcomponents.utils.ScopedMemoryPool;
 
@@ -103,7 +104,7 @@ public class ActiveComponentFacade
                crossScopeInvocator.prepareForCreatePeriodicComponent(scheduling, start, period, 
                        cost, deadline, memory, componentClass, id); // key method
                
-               executeInArea(crossScopeInvocator, workingScope, true);               
+               ExecutorInArea.executeInArea(crossScopeInvocator, workingScope, true);               
                
            }
         });
@@ -133,7 +134,7 @@ public class ActiveComponentFacade
                crossScopeInvocator.prepareForCreateAperiodicComponent(scheduling, cost, deadline,
                        memory, componentClass, key); // key method
                
-               executeInArea(crossScopeInvocator, workingScope, true);               
+               ExecutorInArea.executeInArea(crossScopeInvocator, workingScope, true);               
            }
         });
         ScopedMemoryPool.freeInstance(tmpScope);
@@ -165,7 +166,7 @@ public class ActiveComponentFacade
                crossScopeInvocator.prepareForCreateSporadicComponent(scheduling, minInterarrival, 
                      cost, deadline, memory, componentClass, key); // key method
                
-               executeInArea(crossScopeInvocator, workingScope, true);               
+               ExecutorInArea.executeInArea(crossScopeInvocator, workingScope, true);               
            }
         });
         ScopedMemoryPool.freeInstance(tmpScope);
@@ -190,7 +191,7 @@ public class ActiveComponentFacade
                ActiveComponentCrossScopeInvocationRunnable crossScopeInvocator = 
                    new ActiveComponentCrossScopeInvocationRunnable();
                crossScopeInvocator.prepareForTerminate(); // key method
-               executeInArea(crossScopeInvocator, workingScope, true);               
+               ExecutorInArea.executeInArea(crossScopeInvocator, workingScope, true);               
            }
         });
         ScopedMemoryPool.freeInstance(tmpScope);        
@@ -199,6 +200,7 @@ public class ActiveComponentFacade
     }
     
              
+
     /**
      * Encapsulates the "jump's logic" 
      * @param r runnable for cross-scope invocation runnable.
@@ -206,7 +208,7 @@ public class ActiveComponentFacade
      * @param temporalScope <code>true</code> to indicate that <code>s</code> is a temporary scope; 
      *                       <code>false</code> otherwise.
      *                        
-     */
+     * /
     private void executeInArea(ActiveComponentCrossScopeInvocationRunnable r, ScopedMemory s, boolean temporalScope) 
     {
         ExecuteInRunnable eir;
@@ -237,5 +239,5 @@ public class ActiveComponentFacade
             if (!temporalScope) ExecuteInRunnable.freeEIR(eir); 
         }
     }    
-
+    */
 }

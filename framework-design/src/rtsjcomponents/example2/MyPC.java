@@ -1,4 +1,4 @@
-package rtsjcomponents.passive;
+package rtsjcomponents.example2;
 
 import rtsjcomponents.PassiveComponent;
 
@@ -6,7 +6,7 @@ import rtsjcomponents.PassiveComponent;
  * Defines the business methods of the passive component
  * @author juancol
  */
-public interface MyPassiveComponent extends PassiveComponent{
+public interface MyPC extends PassiveComponent{
 
     int execSIM_0(int i);
     

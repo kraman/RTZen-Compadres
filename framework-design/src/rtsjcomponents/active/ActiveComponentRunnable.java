@@ -1,8 +1,12 @@
 package rtsjcomponents.active;
 
 import javax.realtime.RealtimeThread;
+import javax.realtime.ScopedMemory;
 
 import rtsjcomponents.ActiveComponent;
+import rtsjcomponents.example2.generated.MyPCRunnable;
+import rtsjcomponents.utils.ExecutorInArea;
+import rtsjcomponents.utils.ScopedMemoryPool;
 
 public class ActiveComponentRunnable implements Runnable {
     private boolean terminated = false;
@@ -19,8 +23,15 @@ public class ActiveComponentRunnable implements Runnable {
 
     public void run() {
         do {
-            if (!terminated)
-                component.execute();
+            if (!terminated) {
+                final ScopedMemory tmpScope = ScopedMemoryPool.getInstance();
+                tmpScope.enter(new Runnable(){
+                    public void run() {
+                        component.execute();
+                    }
+                 });        
+                ScopedMemoryPool.freeInstance(tmpScope);
+            }
         } while (RealtimeThread.waitForNextPeriod() && !terminated);
 
         if (terminated && !terminateExecuted) {

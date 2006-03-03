@@ -31,7 +31,7 @@ public class ContextImpl implements rtsjcomponents.Context
 
     public int getLocalInt(String name)
     {
-        if (name.equals(MyActiveComponent.ITER_STR))
+        if (name.equals(MyAC.ITER_STR))
             return (this.id + 1);
         else 
             throw Exceptions.ILLEGAL_ARGUMENT_EXCEPTION;

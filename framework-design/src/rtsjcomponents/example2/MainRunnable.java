@@ -8,6 +8,7 @@ import javax.realtime.RealtimeThread;
 import javax.realtime.RelativeTime;
 
 import rtsjcomponents.active.ActiveComponentFacade;
+import rtsjcomponents.example2.generated.MyPCFacade;
 import rtsjcomponents.utils.Constants;
 
 /**
@@ -54,11 +55,38 @@ public class MainRunnable implements Runnable
                 new MemoryParameters(MemoryParameters.NO_MAX, MemoryParameters.NO_MAX);
             
             facades[i].createPeriodicComponent(priorityParams, start, period, cost, 
-                    deadline, memoryParams, MyActiveComponent.class, i);
+                    deadline, memoryParams, MyAC.class, i);
         }
         
         return facades;
     }
+    
+    
+    
+    /**
+     * Creates a set of active components 
+     * @param num number of active components to be created
+     * @param facade active component facade
+     */
+    private MyPCFacade[] createPassiveComponents(final int num)
+    {
+        if (num <= 0)
+        {
+            System.out.println("num must be greater than zero."); 
+            System.exit(-1);
+        }
+        
+        MyPCFacade[] facades = new MyPCFacade[num];
+        
+        for (int i = 0; i < num; i++)
+        {
+            facades[i] = MyPCFacade.getInstance();
+            facades[i].createPassiveComponent(i); 
+        }
+        
+        return facades;
+    }
+    
     
     public void run()
     {

@@ -16,8 +16,8 @@ import rtsjcomponents.utils.Constants;
  */
 public class MainRunnable implements Runnable
 {    
-    public static final int BASE_PERIOD = 3000;
-    public static final int BASE_DEADLINE = 3000;
+    public static final int BASE_PERIOD = 3;
+    public static final int BASE_DEADLINE = 3;
     public static final int NUM_OF_ACTIVE_COMPONENTS = 5;  
     
     /**
@@ -46,7 +46,7 @@ public class MainRunnable implements Runnable
             PriorityParameters priorityParams = new PriorityParameters(priority - i);
             RelativeTime start = new RelativeTime(Constants.A_SECOND, 0);
             RelativeTime period = new RelativeTime((BASE_PERIOD + i) * Constants.A_SECOND, 0);
-            RelativeTime cost = new RelativeTime((Constants.A_SECOND + i) / 2 , 0);
+            RelativeTime cost = new RelativeTime((Constants.A_SECOND + i) , 0);
             RelativeTime deadline = new RelativeTime((BASE_DEADLINE + i) * Constants.A_SECOND, 0);
             MemoryParameters memoryParams = 
                 new MemoryParameters(MemoryParameters.NO_MAX, MemoryParameters.NO_MAX);
@@ -69,6 +69,8 @@ public class MainRunnable implements Runnable
         {
             facades = this.createActiveComponents(NUM_OF_ACTIVE_COMPONENTS);            
             RealtimeThread.sleep(20 * Constants.A_SECOND);
+
+
         }
         catch (Exception e)
         {
@@ -79,6 +81,7 @@ public class MainRunnable implements Runnable
         {
             for (int i = 0; i < facades.length; i++) {
                 ActiveComponentFacade.freeInstance(facades[i]);
+		
             }
         }       
     }

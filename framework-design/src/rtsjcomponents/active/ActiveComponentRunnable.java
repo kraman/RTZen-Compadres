@@ -33,7 +33,10 @@ public class ActiveComponentRunnable implements Runnable
     
     synchronized public void terminate() 
     {
-        terminated = true;
+        //System.out.println("In ACR terminate");
+	// Shruti- added this this terminate() command explicitly.
+	component.terminate();
+	terminated = true;
     }
     
 }

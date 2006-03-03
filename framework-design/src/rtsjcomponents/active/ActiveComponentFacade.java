@@ -70,7 +70,8 @@ public class ActiveComponentFacade
      */
     public static void freeInstance(ActiveComponentFacade component)
     {
-        // TODO enqueue only if it comes from the right mermory area.
+        //System.out.println("In facade.freeInstance"); 
+	// TODO enqueue only if it comes from the right mermory area.
         //System.out.println("ActiveComponentFacade.freeInstance");
         component.terminate();
         poolOfFacades.enqueue(component);

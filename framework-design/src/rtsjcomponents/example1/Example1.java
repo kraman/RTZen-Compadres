@@ -23,9 +23,6 @@ public class Example1 extends RealtimeThread
             rtt.start();
             rtt.join();
 
-	    // Write time measurements into a log
-	    System.out.println("Pre-measurements");
-            MyComponent.logRecords();
             System.out.println("Everything is OK");
             System.exit(0);
         }

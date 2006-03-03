@@ -310,7 +310,8 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
           ScopedMemory thisScope = (ScopedMemory) area;
         
           ActiveComponentPortal portal = (ActiveComponentPortal) thisScope.getPortal();
-          portal.getActiveComponentRunnable().terminate();
+	  portal.getActiveComponentRunnable().terminate();
+	  
         }
         finally
         {

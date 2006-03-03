@@ -27,7 +27,7 @@ public class ActiveComponentFacade
     private static final int MAX_NUM_OF_ACTIVE_COMPONENTS = 9;
 
     private ScopedMemory workingScope;
-    boolean initialized = false;
+    private boolean initialized = false;
     
     /** Pool of immortal facades */
     private static Queue poolOfFacades;
@@ -73,13 +73,16 @@ public class ActiveComponentFacade
         //System.out.println("In facade.freeInstance"); 
 	// TODO enqueue only if it comes from the right mermory area.
         //System.out.println("ActiveComponentFacade.freeInstance");
-        component.terminate();
+        component.deactivate();
         poolOfFacades.enqueue(component);
     }
 
     /** Private constructor to prevent memory leaks. */
     private ActiveComponentFacade() { }
-    
+
+    /**
+     * Create and activate a periodic component 
+     */
     public void createPeriodicComponent(final PriorityParameters scheduling, 
             final RelativeTime start, final RelativeTime period, final RelativeTime cost,
             final RelativeTime deadline, final MemoryParameters memory, final Class componentClass, final int id) 
@@ -108,6 +111,7 @@ public class ActiveComponentFacade
 
         this.initialized = true;
     }
+
 
     public void createAperiodicComponent(final PriorityParameters scheduling, 
             final RelativeTime cost, final RelativeTime deadline, final MemoryParameters memory, 
@@ -174,7 +178,7 @@ public class ActiveComponentFacade
     
     
     /**  Deactivate the component. */ 
-    private void terminate()
+    private void deactivate()
     {
         // TODO how to safely return the working scope to the pool
         if (!this.initialized) return;

@@ -18,7 +18,7 @@ public class Example2 extends RealtimeThread
     {
         try
         {
-            System.out.println("Example1 starting ...");
+            System.out.println("Example2 starting ...");
             ImmortalMemory imm = ImmortalMemory.instance();
             RealtimeThread rtt = (RealtimeThread) imm.newInstance(Example2.class);
             rtt.setDaemon(false);

@@ -11,7 +11,7 @@ import rtsjcomponents.active.ActiveComponentFacade;
 import rtsjcomponents.utils.Constants;
 
 /**
- * Example of main runnable for running active components.
+ * Example of main runnable for running active and passive components.
  * @author juancol
  */
 public class MainRunnable implements Runnable
@@ -19,6 +19,8 @@ public class MainRunnable implements Runnable
     public static final int BASE_PERIOD = 3;
     public static final int BASE_DEADLINE = 3;
     public static final int NUM_OF_ACTIVE_COMPONENTS = 5;  
+    public static final int NUM_OF_PASSIVE_COMPONENTS = 5;
+    public static final int NUM_OF_RUNNABLES_PER_PASSIVE_COMPONENTS = 10;
     
     /**
      * Creates a set of active components 

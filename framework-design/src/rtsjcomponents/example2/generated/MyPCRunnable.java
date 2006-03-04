@@ -1,16 +1,17 @@
 package rtsjcomponents.example2.generated;
 
+import javax.realtime.ImmortalMemory;
+import javax.realtime.InaccessibleAreaException;
 import javax.realtime.MemoryArea;
 import javax.realtime.NoHeapRealtimeThread;
 import javax.realtime.RealtimeThread;
 import javax.realtime.ScopedMemory;
 
-import rtsjcomponents.example2.MyPC;
 import rtsjcomponents.example2.MyPCImpl;
 import rtsjcomponents.utils.ExecuteInRunnable;
 import rtsjcomponents.utils.ObjectHolder;
+import rtsjcomponents.utils.ScopedMemoryPool;
 import rtsjcomponents.utils.WedgeRunnable;
-
 
 public class MyPCRunnable implements Runnable {
 
@@ -21,10 +22,6 @@ public class MyPCRunnable implements Runnable {
 
     static final int TERMINATE_OP = 1;
 
-    static final int DO_execSIM_0 = 2;
-
-    static final int DO_execSIM_1 = 3;
-
     static final int DO_execSDM_0 = 4;
 
     static final int DO_execSDM_1 = 5;
@@ -34,15 +31,20 @@ public class MyPCRunnable implements Runnable {
 
     private boolean initialized = false;
 
+    private int intArg_0;
+
+    private ObjectHolder oh;
+    private ScopedMemory compScope;
+    
+    // Return values
+    private double doubleRetValue;
+    private int    intRetValue;
+    private long   longRetValue;
+    private char   charRetValue;
+    private Object returnValue;
+    
     private Throwable t;
 
-    private int id;
-
-
-//    private Object arg;
-//    private Object returnValue;
-//    private ObjectHolder oh;
-//    private ScopedMemory implScope;
 
     /** Package constructor */
     MyPCRunnable() {
@@ -57,17 +59,11 @@ public class MyPCRunnable implements Runnable {
         case TERMINATE_OP:
             this.terminate();
             break;
-        case DO_execSIM_0:
-            // this.;
-            break;
-        case DO_execSIM_1:
-            // this.;
-            break;
         case DO_execSDM_0:
-            // this.;
+            this.DoExecSDM_0();
             break;
         case DO_execSDM_1:
-            // this.;
+            this.DoExecSDM_1();
             break;
 
         default:
@@ -79,7 +75,7 @@ public class MyPCRunnable implements Runnable {
 
     public final void prepareForCreatePassiveComponent(final int id) {
         this.operation = CREATE_COMP_OP;
-        this.id = id;
+        this.intArg_0 = id;
     }
 
     private void createPassiveComponent() {
@@ -103,7 +99,7 @@ public class MyPCRunnable implements Runnable {
                 new NoHeapRealtimeThread(null, null, null, currentScope, null, portal.getWedge());
             wedgeThread.setDaemon(false);
 
-            comp.init(new rtsjcomponents.example2.ContextImpl(this.id));
+            comp.init(new rtsjcomponents.example2.ContextImpl(this.intArg_0));
             
             wedgeThread.start();            
             
@@ -123,27 +119,107 @@ public class MyPCRunnable implements Runnable {
     }
 
     private void terminate() {
-        try
-        {
+        try {
             ScopedMemory scope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
             MyPCPortal portal = (MyPCPortal) scope.getPortal();
             portal.getWedge().deactivate();
             this.initialized = false;
         }
-        finally
-        {
+        finally {
             this.resetOperationCode();
         }        
     }
 
+    // 
+    // Note that SIM methods don't need nothing from the runnable, only SDM methods do.
+    //
+    
+    public void prepareForExecSDM_0(int i) {
+        this.operation = DO_execSDM_0;
+        this.intArg_0 = i;
+    }
+    
+    private void DoExecSDM_0() {
+        try {
+            ScopedMemory scope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
+            MyPCPortal portal = (MyPCPortal) scope.getPortal();
+            this.intRetValue = portal.getImpl().execSDM_0(this.intArg_0);
+        }
+        finally {
+            this.resetOperationCode();
+        }        
+    }
+    
+    
+    public void prepareForExecSDM_1(final int i, final ObjectHolder oh, final ScopedMemory compScope) {
+        this.operation = DO_execSDM_1;
+        this.intArg_0 = i;
+        this.oh = oh;
+        this.compScope = compScope;
+    }
+    
+    
+    private void DoExecSDM_1() {
+        try
+        {
+            ScopedMemory scope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
+            final MyPCPortal portal = (MyPCPortal) scope.getPortal();
+            
+            final ScopedMemory tmpScope = ScopedMemoryPool.getInstance();
+            
+            tmpScope.enter(new Runnable(){
+                public void run() {
+                    Integer result = portal.getImpl().execSIM_1(intArg_0);
+                    
+                    MyPCRunnable.this.returnValue(result.intValue());
+               }
+            });        
+
+            ScopedMemoryPool.freeInstance(tmpScope);
+        }
+        finally {
+            this.resetOperationCode();
+        }
+    }
+    
+    private void returnValue(final int result) {
+
+        ScopedMemory targetScope = (ScopedMemory) MemoryArea.getMemoryArea(oh);
+        
+        // Prepare the ReturnRunnable for the jump
+        MyPCReturnRunnable rr = MyPCReturnRunnable.getInstance();
+        rr.prepareForReturnForDoExecSDM_1(result, targetScope); 
+        
+        ExecuteInRunnable eir2 = ExecuteInRunnable.getAnInitializedEIR(rr, compScope);
+        ExecuteInRunnable eir1 = ExecuteInRunnable.getAnInitializedEIR(eir2, targetScope); 
+
+        try {
+            ImmortalMemory.instance().executeInArea(eir1);
+        }
+        catch (InaccessibleAreaException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        finally {
+            ExecuteInRunnable.freeEIR(eir2);
+            ExecuteInRunnable.freeEIR(eir1);
+            MyPCReturnRunnable.freeInstance(rr);
+        }
+    }    
     
     /** Assign an illegal operation value to the field operation */
     protected void resetOperationCode() {
         this.operation = ILLEGAL_OP;
         this.t = null;
-        this.id = Integer.MIN_VALUE;
+        this.intArg_0 = Integer.MIN_VALUE;
+        this.compScope = null;
     }
 
+    
+    /* 
+     * TODO These methods can be reused, so we need to put them in an abstract class 
+     * (or something similar)
+     */
     boolean isThereAnyThrowable() {
         return (this.t != null);
     }
@@ -151,4 +227,80 @@ public class MyPCRunnable implements Runnable {
     Throwable getThrowable() {
         return this.t;
     }
+
+    /**
+     * @return Returns the returnValue.
+     */
+    public Object getReturnValue()
+    {
+        return returnValue;
+    }
+
+    /** 
+     * @param returnValue The returnValue to set.
+     */
+    private void setReturnValue(Object returnValue)
+    {
+        this.returnValue = returnValue;
+    }
+    /**
+     * @return Returns the charRetValue.
+     */
+    public char getCharRetValue()
+    {
+        return charRetValue;
+    }
+    /**
+     * @param charRetValue The charRetValue to set.
+     */
+    private void setCharRetValue(char charRetValue)
+    {
+        this.charRetValue = charRetValue;
+    }
+    /**
+     * @return Returns the doubleRetValue.
+     */
+    public double getDoubleRetValue()
+    {
+        return doubleRetValue;
+    }
+    /**
+     * @param doubleRetValue The doubleRetValue to set.
+     */
+    private void setDoubleRetValue(double doubleRetValue)
+    {
+        this.doubleRetValue = doubleRetValue;
+    }
+    /**
+     * @return Returns the intRetValue.
+     */
+    public int getIntRetValue()
+    {
+        return intRetValue;
+    }
+    /**
+     * @param intRetValue The intRetValue to set.
+     */
+    private void setIntRetValue(int intRetValue)
+    {
+        this.intRetValue = intRetValue;
+    }
+    /**
+     * @return Returns the longRetValue.
+     */
+    public long getLongRetValue()
+    {
+        return longRetValue;
+    }
+    /**
+     * @param longRetValue The longRetValue to set.
+     */
+    private void setLongRetValue(long longRetValue)
+    {
+        this.longRetValue = longRetValue;
+    }
+    
+
+
 }
+

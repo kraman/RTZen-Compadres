@@ -2,16 +2,19 @@ package rtsjcomponents.example2.generated;
 
 import javax.realtime.ImmortalMemory;
 import javax.realtime.MemoryArea;
+import javax.realtime.RealtimeThread;
 import javax.realtime.ScopedMemory;
 
 import rtsjcomponents.Context;
 import rtsjcomponents.example2.MainRunnable;
 import rtsjcomponents.example2.MyPC;
+import rtsjcomponents.example2.MyPCImpl;
 import rtsjcomponents.utils.Errors;
-import rtsjcomponents.utils.Exceptions;
 import rtsjcomponents.utils.ExecutorInArea;
 import rtsjcomponents.utils.Queue;
 import rtsjcomponents.utils.ScopedMemoryPool;
+import rtsjcomponents.utils.TempScopePortal;
+import rtsjcomponents.utils.ObjectHolder;
 
 public class MyPCFacade implements MyPC{
     
@@ -20,16 +23,13 @@ public class MyPCFacade implements MyPC{
     public static final int NUM_OF_RUNNABLES = 
         MainRunnable.NUM_OF_RUNNABLES_PER_PASSIVE_COMPONENTS;
    
+    public static final int NUM_OF_STATELESS_IMPLS = 
+        MainRunnable.NUM_OF_STATELESS_PASSIVE_COMPONENT_IMPLS;
 
     private static Queue poolOfProxies;
     private static Queue poolOfRunnables;
-  
-    
-    // This may be obtain from a pool, but for this example I only need one from
-    // immortal memory.
-//    private static final MyPassiveComponentRunnable RUNNABLE =  
-//        new MyPassiveComponentRunnable(); 
-    // TODO How to manage runnables, sychro,etc.?
+    private static Queue poolOfCompImpl;
+    // TODO How to manage runnables, sychro, etc.?
 
     // Static block for creating pools in immortal memory.
     static {
@@ -40,16 +40,24 @@ public class MyPCFacade implements MyPC{
             }
             
             poolOfRunnables = Queue.fromImmortal();
+
             for (int i = 0; i < NUM_OF_RUNNABLES; i++) {
                 poolOfProxies.enqueue(new MyPCRunnable());
+            }
+
+            poolOfCompImpl = Queue.fromImmortal();
+            for (int i = 0; i < NUM_OF_STATELESS_IMPLS; i++) {
+                MyPCImpl c = new MyPCImpl();
+                // Here we should invoke c.init(Context ctx), in order to
+                // initialize the instances correctly
+                poolOfCompImpl.enqueue(c);
             }
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
-    
-    
+        
     private boolean initialized = false;
     private ScopedMemory stateScope;
     
@@ -135,28 +143,67 @@ public class MyPCFacade implements MyPC{
     }
 
     public int execSIM_0(int i) {
-
-                
-
-        
-        return 0;
+        MyPCImpl c = (MyPCImpl) poolOfCompImpl.dequeue();
+        int result = c.execSIM_0(i);
+        poolOfCompImpl.enqueue(c);
+        return result; 
     }
 
     public Integer execSIM_1(int i) {
-        // TODO Auto-generated method stub
-        return null;
+        MyPCImpl c = (MyPCImpl) poolOfCompImpl.dequeue();
+        Integer result = c.execSIM_1(i);
+        poolOfCompImpl.enqueue(c);
+        return result; 
     }
 
     public int execSDM_0(int i) {
-        // TODO Auto-generated method stub
-        return 0;
+        MyPCRunnable csir = (MyPCRunnable) poolOfRunnables.dequeue();
+        csir.prepareForExecSDM_0(i);
+        ExecutorInArea.executeInArea(csir, stateScope, true);
+        int result = csir.getIntRetValue();
+        poolOfRunnables.enqueue(csir);
+        return result;
     }
 
     public Integer execSDM_1(int i) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        
+        ScopedMemory currentScope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
+        final ObjectHolder  oh = (ObjectHolder) currentScope.getPortal();
+        
+        // Obtain the component scope which is parent of the current scope.
+        ScopedMemory compScope = (ScopedMemory) 
+            RealtimeThread.getOuterMemoryArea(RealtimeThread.getMemoryAreaStackDepth() - 2);
+        
+        // Take advantage of this object
+        MyPCRunnable csir = new MyPCRunnable(); 
+        csir.prepareForExecSDM_1(i, oh, compScope);
+        ExecutorInArea.executeInArea(csir, this.stateScope, true);
 
+        
+        return (Integer) oh.held;
+        
+//        try 
+//        {
+//            cr.prepareForDoSquare(a, holder, this.stateScope);
+//            tmpScope.enter(cr);
+//        }
+//        catch (Exception e) 
+//        {
+//            e.printStackTrace();
+//        }
+//        finally 
+//        {
+//            appPortal.freeObjectHolder(holder);
+//            appPortal.freeCalculatorRunnable(cr);
+//            ScopedMemoryPool.freeInstance(tmpScope);
+//        }
+
+//        ExecutorInArea.executeInArea(csir, stateScope, true);
+//        Integer result = (Integer) csir.getReturnValue();
+//        poolOfRunnables.enqueue(csir);
+//        return result;
+          }
+    
     
     public void init(Context ctx) {
         throw Errors.NO_SUCH_METHOD_ERROR;

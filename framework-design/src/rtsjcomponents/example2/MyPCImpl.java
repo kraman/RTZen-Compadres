@@ -27,13 +27,12 @@ public class MyPCImpl implements MyPC {
 
     public int execSDM_0(int i) {
         // TODO Access the state of the component
-        MyAC.doWork(i);
-        return i;
+        return MyAC.doWork(i);
     }
 
     public Integer execSDM_1(int i) {
         // TODO Access the state of the component
-        return null;
+        return new Integer(MyAC.doWork(i));
     }
 
 

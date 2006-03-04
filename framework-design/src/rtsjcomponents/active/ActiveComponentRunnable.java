@@ -4,11 +4,13 @@ import javax.realtime.RealtimeThread;
 import javax.realtime.ScopedMemory;
 
 import rtsjcomponents.ActiveComponent;
-import rtsjcomponents.example2.generated.MyPCRunnable;
-import rtsjcomponents.utils.ExecutorInArea;
+import rtsjcomponents.example2.MainRunnable;
+import rtsjcomponents.utils.ObjectHolder;
 import rtsjcomponents.utils.ScopedMemoryPool;
+import rtsjcomponents.utils.TempScopePortal;
 
 public class ActiveComponentRunnable implements Runnable {
+    
     private boolean terminated = false;
 
     private boolean terminateExecuted = false;
@@ -27,6 +29,8 @@ public class ActiveComponentRunnable implements Runnable {
                 final ScopedMemory tmpScope = ScopedMemoryPool.getInstance();
                 tmpScope.enter(new Runnable(){
                     public void run() {
+                        ScopedMemory currentScope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
+                        currentScope.setPortal(new ObjectHolder());
                         component.execute();
                     }
                  });        

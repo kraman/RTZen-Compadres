@@ -22,6 +22,7 @@ public class MainRunnable implements Runnable
     public static final int NUM_OF_ACTIVE_COMPONENTS = 5;  
     public static final int NUM_OF_PASSIVE_COMPONENTS = 5;
     public static final int NUM_OF_RUNNABLES_PER_PASSIVE_COMPONENTS = 10;
+    public static final int NUM_OF_STATELESS_PASSIVE_COMPONENT_IMPLS = 10;
     
     /**
      * Creates a set of active components 

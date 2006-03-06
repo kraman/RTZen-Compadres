@@ -158,10 +158,8 @@ public class MyPCRunnable implements Runnable {
         this.compScope = compScope;
     }
     
-    
     private void DoExecSDM_1() {
-        try
-        {
+        try {
             ScopedMemory scope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
             final MyPCPortal portal = (MyPCPortal) scope.getPortal();
             

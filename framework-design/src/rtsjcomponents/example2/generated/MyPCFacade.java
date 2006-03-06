@@ -176,6 +176,8 @@ public class MyPCFacade implements MyPC{
         
         // Take advantage of this object
         MyPCRunnable csir = new MyPCRunnable(); 
+        // set csir as the portal
+        
         csir.prepareForExecSDM_1(i, oh, compScope);
         ExecutorInArea.executeInArea(csir, this.stateScope, true);
 

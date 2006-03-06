@@ -72,10 +72,7 @@ public class MyPCReturnRunnable implements Runnable {
             System.exit(-1); //pedant
         }
     }
-
-    /** 
-     * Prepares this runnable for executing <code>doSquare</code> operation. 
-     */
+    
     void prepareForReturnForDoExecSDM_1(final int result, final ScopedMemory targetScope) {
         this.operation = MyPCRunnable.DO_execSDM_1;
         this.intResult = result;
@@ -91,6 +88,8 @@ public class MyPCReturnRunnable implements Runnable {
             System.exit(-1); //pedant
         }
         
+        // In this place we copy the result so that it is available in the scope where
+        // the call was originated.
         Integer result = new Integer(this.intResult);
         ObjectHolder oh  = (ObjectHolder) s.getPortal();
         oh.held = result;

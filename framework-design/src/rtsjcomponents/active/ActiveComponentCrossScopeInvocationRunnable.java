@@ -62,9 +62,6 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
         // TODO Improve error management
         switch (this.operation)
         {
-/*        case INIT_OP:
-            this.init();
-            break;*/      
         case CREATE_COMP_OP:
             this.createActiveComponent();
             break;
@@ -78,71 +75,6 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
         }
     }
 
-    /**
-     * Prepares this runnable for executing <code>init</code> operation.
-     */
-/*    void prepareForInit() 
-    {
-        this.operation = ActiveComponentCrossScopeInvocationRunnable.INIT_OP;
-    }
-*/
-    /**
-     * Creates and initializes objects into the working scope.
-     */
-/*    private synchronized void init()
-    {
-        try
-        {
-            MemoryArea area = RealtimeThread.getCurrentMemoryArea();
-            
-            if (!(area instanceof ScopedMemory))
-            {
-                System.out.println(ExecuteInRunnable.RUNNABLE_NOT_IN_A_SCOPE_MSG);
-                System.exit(-1); // pedant
-            }
-
-            ScopedMemory thisScope = (ScopedMemory) area;
-            
-            this.createPeriodicComponent(thisScope);
-
-        }
-        finally
-        {
-            this.resetOperationCode();
-        }
-    }
-*/    
-/*    private void createPeriodicComponent(ScopedMemory scope) 
-    {
-        ActiveComponent comp = new MyComponent();
-        ActiveComponentRunnable componentRunnable = new ActiveComponentRunnable(comp);
-        ActiveComponentPortal portal = new ActiveComponentPortal(componentRunnable);
-        scope.setPortal(portal);
-
-        // All these parameters must be obtain from the descriptor file. 
-        int priority = 5 + PriorityScheduler.getNormPriority(RealtimeThread.currentRealtimeThread()); 
-        PriorityParameters priorityParams = new PriorityParameters(priority);
-        
-        RelativeTime start = new RelativeTime(Constants.A_SECOND, 0);
-        RelativeTime period = new RelativeTime(2 * Constants.A_SECOND, 0);
-        RelativeTime cost = new RelativeTime(Constants.A_SECOND, 0);
-        RelativeTime deadline = new RelativeTime(2 * Constants.A_SECOND, 0);
-        AsyncEventHandler overrunHandler = null;
-        AsyncEventHandler missHandler = null;
-        PeriodicParameters periodicParams = 
-            new PeriodicParameters(start, period, cost, deadline, overrunHandler, missHandler);
-        
-        NoHeapRealtimeThread periodicThread =  
-            new NoHeapRealtimeThread(priorityParams, 
-                                     periodicParams, 
-                                     null, 
-                                     scope, 
-                                     null, 
-                                     componentRunnable);
-        
-        comp.init();      
-        periodicThread.start();
-    }    */
 
     void prepareForCreatePeriodicComponent(final PriorityParameters scheduling, 
             final RelativeTime start, final RelativeTime period, final RelativeTime cost,
@@ -260,44 +192,31 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
                                          null, 
                                          componentRunnable);
             //System.out.println("here 14");
-//          
+          
             // TODO specific ContextImpl class for experiment (hardcoded).
-            comp.init(new rtsjcomponents.example1.ContextImpl(this.id));       
-            // System.out.println("here 15");
+            comp.init(new rtsjcomponents.example2.ContextImpl(this.id, rtsjcomponents.example2.Example2.testcase));       
             periodicThread.setDaemon(false);
             periodicThread.start();
-            // System.out.println("here 16");
-            
         }
-        catch (IllegalAccessException e)
-        {
-            // TODO Auto-generated catch block
+        catch (Exception e) {
             e.printStackTrace();
+            System.exit(-1); // pedant
         }
-        catch (InstantiationException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        finally
-        {
+        finally {
             this.resetOperationCode();
         }
-    
     }
     
     /**
      * Prepares this runnable for executing <code>terminate</code> operation.
      */
-    void prepareForTerminate()
-    {   
+    void prepareForTerminate() {   
         //System.out.println("GeniusRunnable.prepareForTerminate()");
         this.operation = TERMINATE_OP;
     }
 
     /** Deactivates the wedge thread in order to reclaim the scope. */
-    private void terminate()
-    {   
+    private void terminate() {   
         try
         {        
           MemoryArea area = RealtimeThread.getCurrentMemoryArea();

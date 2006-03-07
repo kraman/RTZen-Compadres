@@ -13,8 +13,7 @@ import rtsjcomponents.utils.Errors;
 import rtsjcomponents.utils.ExecutorInArea;
 import rtsjcomponents.utils.Queue;
 import rtsjcomponents.utils.ScopedMemoryPool;
-import rtsjcomponents.utils.TempScopePortal;
-import rtsjcomponents.utils.ObjectHolder;
+
 
 public class MyPCFacade implements MyPC{
     
@@ -40,9 +39,8 @@ public class MyPCFacade implements MyPC{
             }
             
             poolOfRunnables = Queue.fromImmortal();
-
             for (int i = 0; i < NUM_OF_RUNNABLES; i++) {
-                poolOfProxies.enqueue(new MyPCRunnable());
+                poolOfRunnables.enqueue(new MyPCRunnable());
             }
 
             poolOfCompImpl = Queue.fromImmortal();
@@ -168,42 +166,23 @@ public class MyPCFacade implements MyPC{
     public Integer execSDM_1(int i) {
         
         ScopedMemory currentScope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
-//        final ObjectHolder  oh = (ObjectHolder) currentScope.getPortal();
         
         // Obtain the component scope which is parent of the current scope.
         ScopedMemory compScope = (ScopedMemory) 
             RealtimeThread.getOuterMemoryArea(RealtimeThread.getMemoryAreaStackDepth() - 2);
-        
-        // Take advantage of this object
+
         MyPCRunnable csir = new MyPCRunnable();
         currentScope.setPortal(csir);
         
         csir.prepareForExecSDM_1(i, compScope);
         ExecutorInArea.executeInArea(csir, this.stateScope, true);
         
-        return (Integer) csir.getReturnValue();
+        Integer r = (Integer) csir.getReturnValue();
+       
+        currentScope.setPortal(null);
         
-//        try 
-//        {
-//            cr.prepareForDoSquare(a, holder, this.stateScope);
-//            tmpScope.enter(cr);
-//        }
-//        catch (Exception e) 
-//        {
-//            e.printStackTrace();
-//        }
-//        finally 
-//        {
-//            appPortal.freeObjectHolder(holder);
-//            appPortal.freeCalculatorRunnable(cr);
-//            ScopedMemoryPool.freeInstance(tmpScope);
-//        }
-
-//        ExecutorInArea.executeInArea(csir, stateScope, true);
-//        Integer result = (Integer) csir.getReturnValue();
-//        poolOfRunnables.enqueue(csir);
-//        return result;
-          }
+        return r;
+    }
     
     
     public void init(Context ctx) {

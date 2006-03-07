@@ -14,13 +14,26 @@ import rtsjcomponents.utils.ScopedMemoryPool;
  */
 public class Example2 extends RealtimeThread
 {
+    public static int testcase;
+    
     public static void main(String[] args)
     {
+        if (args.length < 1 || args.length > 2) {
+            System.err.println("Usage: tjvm ... rtsjcomponents.Example2 'case#'");
+            System.err.println("case#=(0,1,2,3,4)");
+        }
+            
+        int testcase = Integer.parseInt(args[0]);
+        if (testcase < 0 || testcase > 4) {
+            throw new IllegalArgumentException("argument must be [0,4]");
+        }
+        
         try
         {
-            System.out.println("Example2 starting ...");
+            System.out.println("Example starting ...");
             ImmortalMemory imm = ImmortalMemory.instance();
             RealtimeThread rtt = (RealtimeThread) imm.newInstance(Example2.class);
+            Example2.testcase = testcase;
             rtt.setDaemon(false);
             rtt.start();
             rtt.join();
@@ -38,7 +51,7 @@ public class Example2 extends RealtimeThread
     {
         super();
     }
-
+    
     public void run()
     {
         MemoryArea area = RealtimeThread.getCurrentMemoryArea();

@@ -1,16 +1,22 @@
 package rtsjcomponents.example2.generated;
 
+import rtsjcomponents.example2.MainRunnable;
 import rtsjcomponents.example2.MyPCImpl;
 import rtsjcomponents.utils.Exceptions;
+import rtsjcomponents.utils.Queue;
 import rtsjcomponents.utils.WedgeRunnable;
 
 public class MyPCPortal {
-
+    
     /** Passive Component implementation */
     private MyPCImpl pc;
 
     /** Wedge thread that keeps this scope alive */
     private WedgeRunnable wedge;
+    
+    private Queue poolOfInternalRunnables;
+    private static final int NUM_OF_INTERNAL_RUNS = 
+        MainRunnable.NUM_OF_ACTIVE_COMPONENTS;
 
     /**
      * Package constructor
@@ -24,6 +30,12 @@ public class MyPCPortal {
 
         this.pc = pc;
         this.wedge = wedge;
+        
+        this.poolOfInternalRunnables = new Queue();
+        for (int i = 0; i < NUM_OF_INTERNAL_RUNS; i++) {
+            poolOfInternalRunnables.enqueue(new MyPCRunnable.InternalRunnable());
+        }
+        
     }
 
     /**
@@ -59,5 +71,11 @@ public class MyPCPortal {
         }
         this.wedge = wedge;
     }
-
+    
+    /**
+     * Returns the pool of internal runnables
+     */
+    final Queue getPoolOfInternalRunnables() {
+        return this.poolOfInternalRunnables;
+    }
 }

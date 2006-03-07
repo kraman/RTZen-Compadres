@@ -17,7 +17,7 @@ import rtsjcomponents.utils.Constants;
  * @author juancol
  */
 public class MainRunnable implements Runnable {
-
+    
     public static final int BASE_PERIOD = 3;
     public static final int BASE_DEADLINE = 3;
     public static final int NUM_OF_ACTIVE_COMPONENTS = 5;
@@ -25,8 +25,8 @@ public class MainRunnable implements Runnable {
     public static final int NUM_OF_RUNNABLES_PER_PASSIVE_COMPONENTS = 10;
     public static final int NUM_OF_STATELESS_PASSIVE_COMPONENT_IMPLS = 10;
 
-    public static MyPC[] myPCFacades;
-    
+    public static final MyPC[] myPCFacades = new MyPC[MainRunnable.NUM_OF_PASSIVE_COMPONENTS];
+  
     /**
      * Creates a set of active components
      * 
@@ -79,6 +79,7 @@ public class MainRunnable implements Runnable {
         for (int i = 0; i < num; i++) {
             facades[i] = MyPCFacade.getInstance();
             facades[i].createPassiveComponent(i);
+            MainRunnable.myPCFacades[i] = facades[i];
         }
 
         return facades;
@@ -93,12 +94,11 @@ public class MainRunnable implements Runnable {
 
         try {
             pasFacades = this.createPassiveComponents(NUM_OF_PASSIVE_COMPONENTS);
-            
-            // Now they are available for the context of the active components 
-            MainRunnable.myPCFacades = pasFacades;  
+            System.out.println("Passive components created ...");
             
             actFacades = this.createActiveComponents(NUM_OF_ACTIVE_COMPONENTS);
-
+            System.out.println("Active components created ...");
+            
             RealtimeThread.sleep(20 * Constants.A_SECOND);
 
             for (int i = 0; i < actFacades.length; i++) {

@@ -16,24 +16,20 @@ public class ActiveComponentRunnable implements Runnable {
     private boolean terminateExecuted = false;
 
     private ActiveComponent component;
+    private InternalRunnable interRun;
 
     ActiveComponentRunnable(ActiveComponent c) {
         if (c == null)
             throw new NullPointerException("Active component is null.");
         this.component = c;
+        this.interRun = new InternalRunnable();
     }
 
     public void run() {
         do {
             if (!terminated) {
                 final ScopedMemory tmpScope = ScopedMemoryPool.getInstance();
-                tmpScope.enter(new Runnable(){
-                    public void run() {
-//                        ScopedMemory currentScope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
-//                        currentScope.setPortal(new ObjectHolder());
-                        component.execute();
-                    }
-                 });        
+                tmpScope.enter(this.interRun);
                 ScopedMemoryPool.freeInstance(tmpScope);
             }
         } while (RealtimeThread.waitForNextPeriod() && !terminated);
@@ -48,5 +44,12 @@ public class ActiveComponentRunnable implements Runnable {
         //System.out.println("In ACR terminate");
         terminated = true;
     }
-
+    
+    private class InternalRunnable implements Runnable {
+        public void run() {
+            ActiveComponentRunnable.this.component.execute();
+        }
+    }
+    
+    
 }

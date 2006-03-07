@@ -4,18 +4,20 @@ import rtsjcomponents.utils.Errors;
 import rtsjcomponents.utils.Exceptions;
 
 /**
- * Specific ContextImpl class for the example 1.
+ * Specific ContextImpl class for the example.
  * 
  * @author juancol
  */
 public class ContextImpl implements rtsjcomponents.Context {
     private int id = Integer.MIN_VALUE;
+    private int exampleId = Integer.MIN_VALUE;
 
-    public ContextImpl(final int i) {
+    public ContextImpl(final int i, final int example) {
         if (i < 0)
             throw Exceptions.ILLEGAL_ARGUMENT_EXCEPTION;
 
         this.id = i;
+        this.exampleId = example;
     }
 
     public Object getComponent(String name) {
@@ -59,7 +61,10 @@ public class ContextImpl implements rtsjcomponents.Context {
     }
 
     public int getGlobalInt(String name) {
-        throw Errors.NO_SUCH_METHOD_ERROR;
+        if (name.equals(MyAC.EXAMPLE_ID_STR))
+            return (this.exampleId);
+        else
+            throw Exceptions.ILLEGAL_ARGUMENT_EXCEPTION;
     }
 
     public short getGlobalShort(String name) {

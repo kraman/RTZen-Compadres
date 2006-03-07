@@ -50,6 +50,8 @@ public class MyPCReturnRunnable implements Runnable {
     private long longResult;
     private double doubleResult;
     private char charResult;
+    
+    private Object objArg;
 
     private ScopedMemory targetScope;
 
@@ -57,7 +59,7 @@ public class MyPCReturnRunnable implements Runnable {
     private int operation = MyPCRunnable.ILLEGAL_OP;
 
     /** Package constructor */
-    private MyPCReturnRunnable() {
+    MyPCReturnRunnable() {
     }
 
     /* @see java.lang.Runnable#run() */
@@ -73,14 +75,14 @@ public class MyPCReturnRunnable implements Runnable {
         }
     }
     
-    void prepareForReturnForDoExecSDM_1(final int result, final ScopedMemory targetScope) {
+    void prepareForReturnForDoExecSDM_1(final Integer result, final ScopedMemory targetScope) {
         this.operation = MyPCRunnable.DO_execSDM_1;
-        this.intResult = result;
+        this.objArg = result;
         this.targetScope = targetScope;
     }
     
     private void doExecSDM_1() {
-
+        
         // It is supposed that we are in the scope in which the call was originated. 
         ScopedMemory s = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
         if (s != this.targetScope) {
@@ -90,9 +92,9 @@ public class MyPCReturnRunnable implements Runnable {
         
         // In this place we copy the result so that it is available in the scope where
         // the call was originated.
-        Integer result = new Integer(this.intResult);
-        ObjectHolder oh  = (ObjectHolder) s.getPortal();
-        oh.held = result;
+        Integer result = new Integer(((Integer) this.objArg).intValue());
+        MyPCRunnable run = (MyPCRunnable) s.getPortal();
+        run.setReturnValue(result);
     }
 
     /** 
@@ -101,11 +103,13 @@ public class MyPCReturnRunnable implements Runnable {
     private void reset() {
         this.operation = MyPCRunnable.ILLEGAL_OP;
         this.targetScope = null;
+        this.objArg = null;
         this.intResult = Integer.MIN_VALUE;
         this.shortResult = Short.MIN_VALUE;
         this.longResult = Long.MIN_VALUE;
         this.doubleResult = Double.NaN;
         this.charResult = Character.MIN_VALUE;
+        
     }
 
 }

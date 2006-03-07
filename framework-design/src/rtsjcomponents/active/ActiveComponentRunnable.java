@@ -29,8 +29,8 @@ public class ActiveComponentRunnable implements Runnable {
                 final ScopedMemory tmpScope = ScopedMemoryPool.getInstance();
                 tmpScope.enter(new Runnable(){
                     public void run() {
-                        ScopedMemory currentScope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
-                        currentScope.setPortal(new ObjectHolder());
+//                        ScopedMemory currentScope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
+//                        currentScope.setPortal(new ObjectHolder());
                         component.execute();
                     }
                  });        

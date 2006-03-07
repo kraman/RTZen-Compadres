@@ -20,7 +20,7 @@ import javax.realtime.Clock;
  */
 public class MyAC implements rtsjcomponents.ActiveComponent {
     
-    public static final String ITER_STR = "iter_base";
+    public static final String ID_STR = "id";
     public static final int ITER_MULTIPLIER = 10;
 
     public static final AbsoluteTime at = new AbsoluteTime();
@@ -35,11 +35,18 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
 
     Context ctx = null;
 
+    private int id;
+    private MyPC myPC;
+    
     public void init(Context ctx) {
         // System.out.println("MyComponent.init()");
         this.ctx = ctx;
         // iter = component ID times multiplier
-        this.iter = this.ctx.getLocalInt(ITER_STR) * ITER_MULTIPLIER;
+        
+        this.id = this.ctx.getLocalInt(ID_STR);
+        this.iter =  (this.id + 1) * ITER_MULTIPLIER;
+        
+        this.myPC = (MyPC) this.ctx.getComponent(Integer.toString(this.id));
     }
 
     public void execute() {

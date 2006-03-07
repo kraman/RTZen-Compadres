@@ -1,5 +1,7 @@
 package rtsjcomponents.example2.generated;
 
+import java.lang.reflect.Constructor;
+
 import javax.realtime.ImmortalMemory;
 import javax.realtime.InaccessibleAreaException;
 import javax.realtime.MemoryArea;
@@ -12,6 +14,7 @@ import rtsjcomponents.utils.ExecuteInRunnable;
 import rtsjcomponents.utils.ObjectHolder;
 import rtsjcomponents.utils.ScopedMemoryPool;
 import rtsjcomponents.utils.WedgeRunnable;
+import rtsjcomponents.utils.QualifiedClassNames;
 
 public class MyPCRunnable implements Runnable {
 
@@ -151,10 +154,9 @@ public class MyPCRunnable implements Runnable {
     }
     
     
-    public void prepareForExecSDM_1(final int i, final ObjectHolder oh, final ScopedMemory compScope) {
+    public void prepareForExecSDM_1(final int i, final ScopedMemory compScope) {
         this.operation = DO_execSDM_1;
         this.intArg_0 = i;
-        this.oh = oh;
         this.compScope = compScope;
     }
     
@@ -167,9 +169,15 @@ public class MyPCRunnable implements Runnable {
             
             tmpScope.enter(new Runnable(){
                 public void run() {
-                    Integer result = portal.getImpl().execSIM_1(intArg_0);
+                    Integer r = portal.getImpl().execSIM_1(intArg_0);
+
+                    ScopedMemory targetScope = 
+                        (ScopedMemory) MemoryArea.getMemoryArea(MyPCRunnable.this);
                     
-                    MyPCRunnable.this.returnValue(result.intValue());
+                    MyPCRunnable.this.copyValueInOriginScope(r, targetScope);
+                    
+                    //MyPCRunnable.this.returnValue(MyPCRunnable.this.getReturnValue(), targetScope);
+                    
                }
             });        
 
@@ -180,30 +188,57 @@ public class MyPCRunnable implements Runnable {
         }
     }
     
-    private void returnValue(final int result) {
+    /**
+     * Copy the result in the scope where the call initiated.
+     * This methods must be generated per return value type of SDM. 
+     */
+    private void copyValueInOriginScope(Integer r, ScopedMemory targetScope) {
+        Class cType;
+        try
+        {
+            // System.out.println("CalculatorReturnRunnable.doSquare(...): " + RealtimeThread.getCurrentMemoryArea());
+            cType = Class.forName(QualifiedClassNames.INTEGER_CLASS);
+            Class[] paramTypes = { Integer.TYPE };
+            Constructor constructor = cType.getConstructor(paramTypes);
+            
+            // potential memory leak, but this logic should execute in a temporary scope
+            Object[] params = { new Integer(r.intValue()) }; 
+            
+            MyPCRunnable.this.returnValue = 
+                (Integer) targetScope.newInstance(constructor, params);
 
-        ScopedMemory targetScope = (ScopedMemory) MemoryArea.getMemoryArea(oh);
-        
-        // Prepare the ReturnRunnable for the jump
-        MyPCReturnRunnable rr = MyPCReturnRunnable.getInstance();
-        rr.prepareForReturnForDoExecSDM_1(result, targetScope); 
-        
-        ExecuteInRunnable eir2 = ExecuteInRunnable.getAnInitializedEIR(rr, compScope);
-        ExecuteInRunnable eir1 = ExecuteInRunnable.getAnInitializedEIR(eir2, targetScope); 
-
-        try {
-            ImmortalMemory.instance().executeInArea(eir1);
+            //System.out.println(result);
         }
-        catch (InaccessibleAreaException e) {
+        catch (Exception e)
+        {
             e.printStackTrace();
             System.exit(-1);
-        }
-        finally {
-            ExecuteInRunnable.freeEIR(eir2);
-            ExecuteInRunnable.freeEIR(eir1);
-            MyPCReturnRunnable.freeInstance(rr);
-        }
-    }    
+        }                            
+    }
+    
+    
+//    private void returnValue(final Object result, ScopedMemory targetScope) {
+//        
+//        // Prepare the ReturnRunnable for the jump
+//        MyPCReturnRunnable rr = MyPCReturnRunnable.getInstance();
+//        rr.prepareForReturnForDoExecSDM_1(result, targetScope); 
+//        
+//        ExecuteInRunnable eir2 = ExecuteInRunnable.getAnInitializedEIR(rr, compScope);
+//        ExecuteInRunnable eir1 = ExecuteInRunnable.getAnInitializedEIR(eir2, targetScope); 
+//
+//        try {
+//            ImmortalMemory.instance().executeInArea(eir1);
+//        }
+//        catch (InaccessibleAreaException e) {
+//            e.printStackTrace();
+//            System.exit(-1);
+//        }
+//        finally {
+//            ExecuteInRunnable.freeEIR(eir2);
+//            ExecuteInRunnable.freeEIR(eir1);
+//            MyPCReturnRunnable.freeInstance(rr);
+//        }
+//    }    
     
     /** Assign an illegal operation value to the field operation */
     protected void resetOperationCode() {

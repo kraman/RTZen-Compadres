@@ -18,14 +18,15 @@ import rtsjcomponents.utils.Constants;
  */
 public class MainRunnable implements Runnable {
     
-    public static final int BASE_PERIOD = 3;
-    public static final int BASE_DEADLINE = 3;
+    public static final int BASE_PERIOD = 1;
+    public static final int BASE_DEADLINE = 1;
     public static final int NUM_OF_ACTIVE_COMPONENTS = 5;
     public static final int NUM_OF_PASSIVE_COMPONENTS = 5;
     public static final int NUM_OF_RUNNABLES_PER_PASSIVE_COMPONENTS = 10;
     public static final int NUM_OF_STATELESS_PASSIVE_COMPONENT_IMPLS = 10;
 
     public static final MyPC[] myPCFacades = new MyPC[MainRunnable.NUM_OF_PASSIVE_COMPONENTS];
+    public static final int UNIT_PERIOD = 250;
   
     /**
      * Creates a set of active components
@@ -50,10 +51,14 @@ public class MainRunnable implements Runnable {
             // TODO Set parameters of active components properly
             PriorityParameters priorityParams = 
                 new PriorityParameters(priority - i);
+            //RelativeTime start = new RelativeTime(Constants.A_SECOND, 0);
             RelativeTime start = new RelativeTime(Constants.A_SECOND, 0);
-            RelativeTime period = new RelativeTime((BASE_PERIOD + i) * Constants.A_SECOND, 0);
-            RelativeTime cost = new RelativeTime((Constants.A_SECOND + i) / 2, 0);
-            RelativeTime deadline = new RelativeTime((BASE_DEADLINE + i) * Constants.A_SECOND, 0);
+            //RelativeTime period = new RelativeTime((BASE_PERIOD + i) * Constants.A_SECOND, 0);
+            RelativeTime period = new RelativeTime((BASE_PERIOD + i) * UNIT_PERIOD, 0);
+            //RelativeTime cost = new RelativeTime((Constants.A_SECOND + i) / 2, 0);
+            RelativeTime cost = new RelativeTime((UNIT_PERIOD+ i) / 2, 0);
+            //RelativeTime deadline = new RelativeTime((BASE_DEADLINE + i) * Constants.A_SECOND, 0);
+            RelativeTime deadline = new RelativeTime((BASE_DEADLINE + i) * UNIT_PERIOD, 0);
             MemoryParameters memoryParams = new MemoryParameters(MemoryParameters.NO_MAX, MemoryParameters.NO_MAX);
 
             facades[i].createPeriodicComponent(priorityParams, start, period,
@@ -99,7 +104,7 @@ public class MainRunnable implements Runnable {
             actFacades = this.createActiveComponents(NUM_OF_ACTIVE_COMPONENTS);
             System.out.println("Active components created ...");
             
-            RealtimeThread.sleep(20 * Constants.A_SECOND);
+            RealtimeThread.sleep(50 * Constants.A_SECOND);
 
             for (int i = 0; i < actFacades.length; i++) {
                 ActiveComponentFacade.freeInstance(actFacades[i]);

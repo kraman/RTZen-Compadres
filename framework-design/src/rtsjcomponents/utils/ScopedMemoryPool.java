@@ -11,7 +11,7 @@ import javax.realtime.ScopedMemory;
 public class ScopedMemoryPool
 {
     //  TODO Constants can be assign from a property file.
-    private static final int NUM_OF_MEM_SCOPES = 30;
+    private static final int NUM_OF_MEM_SCOPES = 50;
 
     private static final long MIN_SCOPE_SIZE = 100 * 1024;
 

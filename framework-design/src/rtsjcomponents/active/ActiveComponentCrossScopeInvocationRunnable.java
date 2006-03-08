@@ -191,6 +191,7 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
                                          currentScope, 
                                          null, 
                                          componentRunnable);
+	   periodicThread.setDaemon(true);
             //System.out.println("here 14");
           
             // TODO specific ContextImpl class for experiment (hardcoded).

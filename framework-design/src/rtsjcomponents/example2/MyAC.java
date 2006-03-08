@@ -27,13 +27,13 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
     public static final String ID_STR = "id";
     public static final String EXAMPLE_ID_STR = "example_id";
     
-    public static final int ITER_MULTIPLIER = 10;
+    public static final int ITER_MULTIPLIER = 100;
 
     public static final AbsoluteTime at = new AbsoluteTime();
 
     public static final int MEASUREMENTS = 50; //Number of measurements needes
 
-    public final long time[] = new long[MEASUREMENTS]; //in nanosec
+    public final long time[] = new long[100]; //in nanosec
 
     private int counter = 0;
 
@@ -104,8 +104,12 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         if (counter <= MEASUREMENTS) {
             time[counter] = t1 - t0;
             counter++;
+	    //System.out.println(this.id+ " " + counter);
         }
-    }
+	//else{
+	    //System.out.println(this.id+ " Counter gt 50");
+	//}
+   } 
     
     private void executeCase1() {
         Clock.getRealtimeClock().getTime(at);

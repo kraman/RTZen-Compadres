@@ -32,7 +32,7 @@ public class ActiveComponentRunnable implements Runnable {
                 tmpScope.enter(this.interRun);
                 ScopedMemoryPool.freeInstance(tmpScope);
             }
-        } while (RealtimeThread.waitForNextPeriod() && !terminated);
+        } while (RealtimeThread.currentRealtimeThread().waitForNextPeriod() && !terminated);
 
         if (terminated && !terminateExecuted) {
             this.terminateExecuted = true;

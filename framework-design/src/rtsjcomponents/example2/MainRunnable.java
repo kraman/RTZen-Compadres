@@ -112,7 +112,13 @@ public class MainRunnable implements Runnable {
             RealtimeThread.sleep(50 * Constants.A_SECOND);
 
             for (int i = 0; i < actFacades.length; i++) {
+                //System.out.println("active facade #: " + i);
                 ActiveComponentFacade.freeInstance(actFacades[i]);
+
+                //System.out.println("passive facade #: " + i);
+                //System.out.println("Mamory area of passive facade #: " + i + " is " + 
+           	//	MemoryArea.getMemoryArea(pasFacades[i]));
+
                 MyPCFacade.freeInstance(pasFacades[i]);
             }
 

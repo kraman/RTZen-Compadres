@@ -68,15 +68,12 @@ public class MyPCFacade implements MyPC{
     }
 
     public static void freeInstance(MyPCFacade f) {
-
-        if (MemoryArea.getMemoryArea(f) instanceof ImmortalMemory){
-            f.deactivate();
-            poolOfProxies.enqueue(f);            
-        } else {
-            System.out.println("trying to enqueue a facade not " +
-                    "allocated in immortal memory");
-            System.exit(-1); //pedant
+        // This checking is not strict because jRate is not compliant with the standard.
+        if (!(MemoryArea.getMemoryArea(f) instanceof ImmortalMemory)){
+            System.out.println("WARN: Enqueueing  facade not allocated in immortal memory. It happens in jRate!");
         }
+        f.deactivate();
+        poolOfProxies.enqueue(f);            
     }
 
     

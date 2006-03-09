@@ -20,5 +20,5 @@ $(OUTFILE):
 	$(GCJ) --classpath=$(CLASSPATH) --main=$(MAIN_JAVA_CLASS) -o $(OUTDIR)/$(OUTFILE) $(SRC_FILES);
 
 clean:
-	rm -R $(OUTDIR);
+	rm -Rf $(OUTDIR);
 

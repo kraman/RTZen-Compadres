@@ -20,6 +20,15 @@
               source="1.3"
               target="1.3"
         />
+      <antcall target="lib"/>
+    </target>
+
+    <target name="lib">
+        <jar
+        jarfile="compadres.jar"
+        basedir="${project}/bin"
+        includes="**"
+        />
     </target>
 
 	<!-- target: default -->

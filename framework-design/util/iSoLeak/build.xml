@@ -1,0 +1,39 @@
+<project name="iSoLeak" default="compile">
+
+    <property name="project" location="../.."/>
+    <property name="src" location="${project}/src"/>
+    <property name="bin" location="${project}/bin"/>
+    <property name="rtsj-lib" location="/opt/timesys/rtsj-ri/lib/foundation.jar"/>
+
+    <target name="run" depends="compile">
+        <java 
+            classname="iSoLeak.IsoLeak"
+            classpath="${project}/bin;${project}/compadres.jar;${java.home}/lib/rt.jar;bcel-5.1.jar"
+            fork="true"
+            >
+            <arg line="${project}/compadres.jar iSoLeak.map"/>
+        </java>
+        <delete dir="${project}/bin/rtsjcomponents"/>
+        <move todir="${project}/bin/rtsjcomponents">
+            <fileset dir="rtsjcomponents"/>
+        </move>        
+    </target>
+
+    <target name="compile">
+        <javac
+            destdir="${project}/bin"
+            srcdir="${project}/util/iSoLeak"
+            failonerror="true"
+            fork="true"
+            debug="true"
+            bootclasspath="${java.home}/lib/rt.jar;${rtsj-lib};${project}/util/iSoLeak/bcel-5.1.jar"
+            memoryMaximumSize="256m"
+            compiler="modern"
+            source="1.2"
+            target="1.2"
+            >
+            <include name="IsoLeak**.java"/>
+            <compilerarg value="-Xlint:unchecked"/>
+        </javac>
+    </target>
+</project>

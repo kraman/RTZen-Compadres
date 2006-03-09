@@ -40,8 +40,13 @@ public class MainRunnable implements Runnable {
             System.exit(-1);
         }
 
-        int priority = 
-            PriorityScheduler.getMaxPriority(RealtimeThread.currentRealtimeThread());
+//       This is not supported by jRate
+//        int priority = 
+//            PriorityScheduler.getMaxPriority(RealtimeThread.currentRealtimeThread());
+
+        PriorityScheduler ps = PriorityScheduler.instance();
+        int priority = ps.getMaxPriority(RealtimeThread.currentRealtimeThread());
+       
 
         ActiveComponentFacade[] facades = new ActiveComponentFacade[num];
 

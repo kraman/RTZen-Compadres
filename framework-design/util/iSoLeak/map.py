@@ -51,7 +51,7 @@ for line in logFile:
             "\t\t<title>" + str(memId) + "</title>\n" +
             "\t</head>\n" +
             "\t<body>\n" +
-            "\t\t<img src=\""+str(memId)+"\".jpg><br/>\n" +
+            "\t\t<img src="+str(memId)+".png><br/>\n" +
             "\t\t<table>\n" +
             "\t\t\t<tr><td>After</td><td>Before</td><td>Leak size</td><td>Final memory size</td></tr>\n" )
 
@@ -64,8 +64,8 @@ for line in logFile:
 for memId in memAreaTimelines.keys():
     memAreaTimelines[memId].close()
     genGraph = open( "genGraph.sh" , "w" )
-    genGraph.write( "set term jpeg\n" )
-    genGraph.write( "set output \"" + str(memId) + ".jpg\"\n" )
+    genGraph.write( "set term png\n" )
+    genGraph.write( "set output \"" + str(memId) + ".png\"\n" )
     #genGraph.write( "set title \""+portalObject+"\"" )
     genGraph.write( "set ylabel \"bytes\"\n" )
     genGraph.write( "set xlabel \"time\"\n" )

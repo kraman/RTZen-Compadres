@@ -16,7 +16,7 @@ public class IsoLeakHelper{
     private static OutputStream leakOut = null;
     private static OutputStream memHierarchyOut = null;
     private static long startTime = System.currentTimeMillis();
-    private static boolean logLeaks = false;
+    private static boolean logLeaks = true;
     public synchronized static void init(){
         //System.out.println("this sucks, butthead");
 	if( leakOut == null ){
@@ -31,8 +31,8 @@ public class IsoLeakHelper{
         }
     }
 
-    private static final int maxNumThreads = 1000;
-    private static final int maxMemRegions = 1000;
+    private static final int maxNumThreads = 100;
+    private static final int maxMemRegions = 100;
     private static final int maxLeaks = 10;
 
     private static final int THRD_ID = 0;
@@ -71,7 +71,7 @@ public class IsoLeakHelper{
     private static int findThread( long threadId ){
         try{
 //System.out.println("threads: " + totThreads + " tid: " + threadId);
-            for( int i=0;i<totThreads && i<maxNumThreads;i++ ){
+            for( int i=0;i<totThreads;i++ ){
                 if( threadLog[i][THRD_ID] == threadId ){
                     return i;
                 }
@@ -137,7 +137,7 @@ public class IsoLeakHelper{
             long immSize = ImmortalMemory.instance().memoryConsumed();
             int threadPos = findThread( thread );
             boolean thrdWasFound = threadPos != -1;
-
+            
             //Scoped Leak
             if( thrdWasFound && logLeaks && threadLog[threadPos][THRD_LOG_SCOPED_SIZE] != scopedSize ){
                 int log = 1;
@@ -194,7 +194,7 @@ public class IsoLeakHelper{
             long immSize = ImmortalMemory.instance().memoryConsumed();
             int threadPos = findThread( thread );
             boolean thrdWasFound = threadPos != -1;
-
+            //System.out.write('s');
             //Scoped Leak
             if( thrdWasFound && logLeaks && threadLog[threadPos][THRD_LOG_SCOPED_SIZE] != scopedSize ){
                 int log = 1;

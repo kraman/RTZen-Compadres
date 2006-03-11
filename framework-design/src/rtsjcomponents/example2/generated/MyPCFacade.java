@@ -189,5 +189,14 @@ public class MyPCFacade implements MyPC{
     public void terminate() {
         throw Errors.NO_SUCH_METHOD_ERROR;
     }
+    
+    
+    public int getComponentScopeHashCode() {
+        if (this.stateScope == null) {
+            return 0;    
+        }
+        
+        return this.stateScope.hashCode();
+    }
 }
 

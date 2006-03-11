@@ -33,7 +33,7 @@
             target="1.2"
             >
             <include name="IsoLeak**.java"/>
-            <compilerarg value="-Xlint:unchecked"/>
+            <!-- compilerarg value="-Xlint:unchecked"/ -->
         </javac>
     </target>
 </project>

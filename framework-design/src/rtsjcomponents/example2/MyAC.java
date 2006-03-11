@@ -27,13 +27,13 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
     public static final String ID_STR = "id";
     public static final String EXAMPLE_ID_STR = "example_id";
     
-    public static final int ITER_MULTIPLIER = 100;
+    public static final int ITER_MULTIPLIER = 1000;
 
     public static final AbsoluteTime at = new AbsoluteTime();
 
-    public static final int MEASUREMENTS = 50; //Number of measurements needes
+    public static final int MEASUREMENTS = 100; //Number of measurements needed
 
-    public final long time[] = new long[100]; //in nanosec
+    public final long time[] = new long[MEASUREMENTS]; //in nanosec
 
     private int counter = 0;
 

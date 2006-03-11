@@ -199,7 +199,16 @@ public class ActiveComponentFacade
         this.initialized = false;
     }
     
-             
+        
+    public int getComponentScopeHashCode() {
+        if (this.workingScope == null) {
+            return 0;    
+        }
+        
+        return this.workingScope.hashCode();
+    }
+    
+    
 
     /**
      * Encapsulates the "jump's logic" 

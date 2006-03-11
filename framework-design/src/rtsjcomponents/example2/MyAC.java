@@ -101,7 +101,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
-        if (counter <= MEASUREMENTS) {
+        if (counter < MEASUREMENTS) {
             time[counter] = t1 - t0;
             counter++;
 	    //System.out.println(this.id+ " " + counter);
@@ -119,7 +119,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
-        if (counter <= MEASUREMENTS) {
+        if (counter < MEASUREMENTS) {
             time[counter] = t1 - t0;
             counter++;
         }
@@ -133,7 +133,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
-        if (counter <= MEASUREMENTS) {
+        if (counter < MEASUREMENTS) {
             time[counter] = t1 - t0;
             counter++;
         }
@@ -147,7 +147,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
-        if (counter <= MEASUREMENTS) {
+        if (counter < MEASUREMENTS) {
             time[counter] = t1 - t0;
             counter++;
         }
@@ -161,7 +161,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
-        if (counter <= MEASUREMENTS) {
+        if (counter < MEASUREMENTS) {
             time[counter] = t1 - t0;
             counter++;
         }

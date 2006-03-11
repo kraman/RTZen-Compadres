@@ -112,7 +112,7 @@ public class MainRunnable implements Runnable {
             actFacades = this.createActiveComponents(NUM_OF_ACTIVE_COMPONENTS);
             System.out.println("Active components created ...");
             
-            RealtimeThread.sleep(15 * Constants.A_MINUTE);
+            RealtimeThread.sleep(2* Constants.A_MINUTE);
             
             // System.out.println ("Saving timestamps in a file ...");
             
@@ -125,7 +125,7 @@ public class MainRunnable implements Runnable {
                     //System.out.println("active facade #: " + i);
                     file.println("Active component id:" + i + ' ' 
                             + actFacades[i].getComponentScopeHashCode());
-                    //ActiveComponentFacade.freeInstance(actFacades[i]);
+                    ActiveComponentFacade.freeInstance(actFacades[i]);
                 }                
                 
 
@@ -135,19 +135,15 @@ public class MainRunnable implements Runnable {
                             + pasFacades[i].getComponentScopeHashCode());
                     //System.out.println("passive facade #: " + i);
                     //System.out.println("Mamory area of passive facade #: " + i + " is " + 
-                //  MemoryArea.getMemoryArea(pasFacades[i]));
-                    //MyPCFacade.freeInstance(pasFacades[i]);
+                    //    MemoryArea.getMemoryArea(pasFacades[i]));
+                    MyPCFacade.freeInstance(pasFacades[i]);
                 }
-                
-//            } catch (IOException e) {
-//                System.out.println("Error writing to file: " + e);
-//            }            
             
             file.close();
             
             // During this time we let the components terminate.
             // We had to do this because of a Timesys RTSJ-RI's bug.
-            //RealtimeThread.sleep(20 * Constants.A_SECOND);
+            RealtimeThread.sleep(20 * Constants.A_SECOND);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);

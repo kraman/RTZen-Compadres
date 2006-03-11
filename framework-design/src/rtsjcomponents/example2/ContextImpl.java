@@ -11,13 +11,15 @@ import rtsjcomponents.utils.Exceptions;
 public class ContextImpl implements rtsjcomponents.Context {
     private int id = Integer.MIN_VALUE;
     private int exampleId = Integer.MIN_VALUE;
+    private int runId = Integer.MIN_VALUE;
 
-    public ContextImpl(final int i, final int example) {
-        if (i < 0)
+    public ContextImpl(final int i, final int example, final int run) {
+        if (i < 0 || example < 0 || run < 0 )
             throw Exceptions.ILLEGAL_ARGUMENT_EXCEPTION;
 
         this.id = i;
         this.exampleId = example;
+        this.runId = run;
     }
 
     public Object getComponent(String name) {
@@ -62,7 +64,9 @@ public class ContextImpl implements rtsjcomponents.Context {
 
     public int getGlobalInt(String name) {
         if (name.equals(MyAC.EXAMPLE_ID_STR))
-            return (this.exampleId);
+            return this.exampleId;
+        else if (name.equals(MyAC.RUN_ID_STR))
+            return this.runId;
         else
             throw Exceptions.ILLEGAL_ARGUMENT_EXCEPTION;
     }

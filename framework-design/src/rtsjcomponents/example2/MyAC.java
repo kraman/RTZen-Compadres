@@ -22,10 +22,12 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
     
     public static final String RECORDS = "timeRecords-comp";
     public static final String CASE = "-case";
+    public static final String RUN = "-run";
     public static final String TXT = ".txt";
     
     public static final String ID_STR = "id";
     public static final String EXAMPLE_ID_STR = "example_id";
+    public static final String RUN_ID_STR = "run_id";
     
     public static final int ITER_MULTIPLIER = 1000;
 
@@ -45,6 +47,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
     private MyPC myPC;    
     
     private int testcase;
+    private int run;
     
     public void init(Context ctx) {
         // System.out.println("MyComponent.init()");
@@ -56,6 +59,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         this.iter =  (this.id + 1) * ITER_MULTIPLIER;
         this.myPC = (MyPC) this.ctx.getComponent(Integer.toString(this.id));
         this.testcase = this.ctx.getGlobalInt(EXAMPLE_ID_STR);
+        this.run = this.ctx.getGlobalInt(RUN_ID_STR);
     }
 
     public void execute() {
@@ -85,13 +89,16 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         case 4:
             this.executeCase4();
             break;
+        case 5:
+            this.executeCase5();
+            break;            
+            
         default:
             System.err.println("Invalid testcase number");
             System.exit(-1); // pedant
             break;
         }
     }
-
     
     private void executeCase0() {
         Clock.getRealtimeClock().getTime(at);
@@ -104,14 +111,25 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         if (counter < MEASUREMENTS) {
             time[counter] = t1 - t0;
             counter++;
-	    //System.out.println(this.id+ " " + counter);
         }
-	//else{
-	    //System.out.println(this.id+ " Counter gt 50");
-	//}
    } 
     
     private void executeCase1() {
+        Clock.getRealtimeClock().getTime(at);
+        long t0 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
+        
+        int i = MyAC.doWork(this.iter);
+        Integer ii = new Integer(i);
+        
+        Clock.getRealtimeClock().getTime(at);
+        long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
+        if (counter < MEASUREMENTS) {
+            time[counter] = t1 - t0;
+            counter++;
+        }
+   }    
+    
+    private void executeCase2() {
         Clock.getRealtimeClock().getTime(at);
         long t0 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         
@@ -125,7 +143,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         }
     }
     
-    private void executeCase2() {
+    private void executeCase3() {
         Clock.getRealtimeClock().getTime(at);
         long t0 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         
@@ -139,7 +157,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         }
     }
     
-    private void executeCase3() {
+    private void executeCase4() {
         Clock.getRealtimeClock().getTime(at);
         long t0 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         
@@ -153,7 +171,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         }
     }
     
-    private void executeCase4() {
+    private void executeCase5() {
         Clock.getRealtimeClock().getTime(at);
         long t0 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         
@@ -178,7 +196,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         //System.out.println ("Saving timestamps in a file ...");
         try {
             FileOutputStream os = 
-                new FileOutputStream(RECORDS + this.id + CASE + this.testcase + TXT);
+                new FileOutputStream(RECORDS + this.id + CASE + this.testcase + RUN + this.run + TXT);
             PrintWriter file = new PrintWriter(os);
             for (int i = 0; i < time.length; i++) {
                 file.println(i + ": " + time[i]);
@@ -202,4 +220,5 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         }
         return x;
     }
+    
 }

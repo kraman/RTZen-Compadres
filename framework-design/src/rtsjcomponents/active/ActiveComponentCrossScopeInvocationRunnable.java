@@ -14,6 +14,7 @@ import javax.realtime.ScopedMemory;
 import javax.realtime.SporadicParameters;
 
 import rtsjcomponents.ActiveComponent;
+import rtsjcomponents.Context;
 import rtsjcomponents.utils.ExecuteInRunnable;
 
 /**
@@ -191,11 +192,14 @@ public class ActiveComponentCrossScopeInvocationRunnable implements Runnable
                                          currentScope, 
                                          null, 
                                          componentRunnable);
-	   periodicThread.setDaemon(true);
+            periodicThread.setDaemon(true);
             //System.out.println("here 14");
           
             // TODO specific ContextImpl class for experiment (hardcoded).
-            comp.init(new rtsjcomponents.example2.ContextImpl(this.id, rtsjcomponents.example2.Example2.testcase));       
+	        Context ctx = new rtsjcomponents.example2.ContextImpl(this.id, 
+	                rtsjcomponents.example2.Example2.testcase, 
+	                rtsjcomponents.example2.Example2.runId); 
+            comp.init(ctx);       
             periodicThread.setDaemon(false);
             periodicThread.start();
         }

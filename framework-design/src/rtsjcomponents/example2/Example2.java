@@ -15,17 +15,23 @@ import rtsjcomponents.utils.ScopedMemoryPool;
 public class Example2 extends RealtimeThread
 {
     public static int testcase;
+    public static int runId;
     
     public static void main(String[] args)
     {
         if (args.length < 1 || args.length > 2) {
-            System.err.println("Usage: tjvm ... rtsjcomponents.Example2 'case#'");
-            System.err.println("case#=(0,1,2,3,4)");
+            System.err.println("Usage: tjvm ... rtsjcomponents.Example2 'case#' 'run#'");
+            System.err.println("case#=(0,1,2,3,4,5) and run#>=0");
         }
-            
+        
         int testcase = Integer.parseInt(args[0]);
-        if (testcase < 0 || testcase > 4) {
-            throw new IllegalArgumentException("argument must be [0,4]");
+        if (testcase < 0 || testcase > 5) {
+            throw new IllegalArgumentException("argument must be [0,5]");
+        }
+
+        int runId = 0;
+        if (args.length == 2) {
+            runId = Integer.parseInt(args[1]);
         }
         
         try
@@ -34,6 +40,7 @@ public class Example2 extends RealtimeThread
             ImmortalMemory imm = ImmortalMemory.instance();
             RealtimeThread rtt = (RealtimeThread) imm.newInstance(Example2.class);
             Example2.testcase = testcase;
+            Example2.runId = runId;
             rtt.setDaemon(false);
             rtt.start();
             rtt.join();

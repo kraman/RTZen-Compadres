@@ -7,6 +7,7 @@ import javax.realtime.NoHeapRealtimeThread;
 import javax.realtime.RealtimeThread;
 import javax.realtime.ScopedMemory;
 
+import rtsjcomponents.Context;
 import rtsjcomponents.example2.MyPCImpl;
 import rtsjcomponents.utils.ExecuteInRunnable;
 import rtsjcomponents.utils.ObjectHolder;
@@ -100,7 +101,12 @@ public class MyPCRunnable implements Runnable {
                 new NoHeapRealtimeThread(null, null, null, currentScope, null, portal.getWedge());
             wedgeThread.setDaemon(false);
 
-            comp.init(new rtsjcomponents.example2.ContextImpl(this.intArg_0, rtsjcomponents.example2.Example2.testcase));
+            // TODO specific ContextImpl class for experiment (hardcoded).
+	        Context ctx = new rtsjcomponents.example2.ContextImpl(this.intArg_0, 
+	                rtsjcomponents.example2.Example2.testcase, 
+	                rtsjcomponents.example2.Example2.runId);
+
+            comp.init(ctx);
             
             wedgeThread.start();            
             

@@ -5,7 +5,7 @@ export LD_ASSUME_KERNEL=2.4.1;
 
 DIR_BASENAME=TEST
 MAX_TESTCASES=5
-MAX_RUNS=2
+MAX_RUNS=10
 
 
 if [ "$1" = "jrate" ]; then

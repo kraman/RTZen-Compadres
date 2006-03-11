@@ -52,7 +52,15 @@ public class IsoLeak {
                 MethodGen method = new MethodGen( methods[i] , cls.getClassName() , pool );
                 if (!(method.isAbstract() || method.isNative()  ) ) {
                     System.out.println( cls.getClassName() + "." + method.getName() + "," + methodId );
-                    map.println( "method" + "," + cls.getClassName() + "." + method.getName() + "," + methodId );
+                    
+                    String methodName = method.getName();
+                    if ( methodName.equals("<init>") ){
+                        methodName = "&lt;init&gt;";
+                    } else if ( methodName.equals("<clinit>") ){
+                        methodName = "&lt;clinit&gt;";
+                    }
+
+                    map.println( "method" + "," + cls.getClassName() + "." + methodName + "," + methodId );
                     methods[i] = addCodetoMethod( method , pool , methodId );
                     ++methodId;
                 }

@@ -92,5 +92,5 @@ for memId in memHtml.keys():
 #    memAreas[mem].writeParent( dotFile )
 #dotFile.write( "}\n" );
 #dotFile.close()
-#
+
 #exec( "dot out.dot -Ipng -oout.png" )

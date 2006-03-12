@@ -22,16 +22,29 @@ import rtsjcomponents.utils.Constants;
  */
 public class MainRunnable implements Runnable {
     
-    public static final int BASE_PERIOD = 1;
-    public static final int BASE_DEADLINE = 1;
-    public static final int NUM_OF_ACTIVE_COMPONENTS = 3;//5;
-    public static final int NUM_OF_PASSIVE_COMPONENTS = 3;//5;
+    public static final int NUM_OF_ACTIVE_COMPONENTS = 5;
+    public static final int NUM_OF_PASSIVE_COMPONENTS = 5;
     public static final int NUM_OF_RUNNABLES_PER_PASSIVE_COMPONENTS = 10;
     public static final int NUM_OF_STATELESS_PASSIVE_COMPONENT_IMPLS = 10;
 
+    public static final int UNIT_PERIOD = 250; // miliseconds
+    public static final int ITER_MULTIPLIER = 1000;
+    public static final int MEASUREMENTS = 100;
+    public static final long AC_TIMES[][] = new long[NUM_OF_ACTIVE_COMPONENTS][];
+    static {
+        for (int i = 0; i < AC_TIMES.length; i++) {
+            AC_TIMES[i] = new long[MEASUREMENTS];
+        }
+    }
+    
     public static final MyPC[] myPCFacades = new MyPC[MainRunnable.NUM_OF_PASSIVE_COMPONENTS];
-    public static final int UNIT_PERIOD = 500;//250; // miliseconds
-  
+    
+    public static final String RECORDS = "timeRecords-comp";
+    public static final String CASE = "-case";
+    public static final String RUN = "-run";
+    public static final String TXT = ".txt";
+    
+    
     /**
      * Creates a set of active components
      * 
@@ -100,17 +113,17 @@ public class MainRunnable implements Runnable {
 
     public void run() {
         MemoryArea area = RealtimeThread.getCurrentMemoryArea();
-        System.out.println("Executing MainRunnable.run() in " + area);
+        //System.out.println("Executing MainRunnable.run() in " + area);
 
         ActiveComponentFacade[] actFacades = null;
         MyPCFacade[] pasFacades = null;
 
         try {
             pasFacades = this.createPassiveComponents(NUM_OF_PASSIVE_COMPONENTS);
-            System.out.println("Passive components created ...");
+            System.out.println("  > Passive components created ...");
             
             actFacades = this.createActiveComponents(NUM_OF_ACTIVE_COMPONENTS);
-            System.out.println("Active components created ...");
+            System.out.println("  > Active components created ...");
             
             RealtimeThread.sleep(2 * Constants.A_MINUTE);
            
@@ -141,11 +154,34 @@ public class MainRunnable implements Runnable {
             
             // During this time we let the components terminate.
             // We had to do this because of a Timesys RTSJ-RI's bug.
-            RealtimeThread.sleep(1 * Constants.A_MINUTE);
-   
+            RealtimeThread.sleep(30 * Constants.A_SECOND);
+            
+            // Printing outpur files
+            for (int i = 0; i < AC_TIMES.length; i++) {
+                MainRunnable.logRecords(AC_TIMES[i], i, Example2.testcase, Example2.runId);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
+    
+    static private void logRecords(long times[], int compId, int testcase, int run) {
+        //System.out.println ("Saving timestamps in a file ... COMPid:" + compId);
+        try {
+            FileOutputStream os = 
+                new FileOutputStream(RECORDS + compId + CASE + testcase + RUN + run + TXT);
+            PrintWriter file = new PrintWriter(os);
+
+            for (int i = 0; i < times.length; i++) {
+                file.println(i + ": " + times[i]);
+            }
+            file.close();
+            //System.out.println("WROTE file: " + RECORDS + compId + CASE + testcase + RUN + run + TXT);
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e);
+        }
+    }
+    
 }

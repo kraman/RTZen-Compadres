@@ -1,5 +1,7 @@
 package rtsjcomponents.example2;
 
+import javax.realtime.AbsoluteTime;
+import javax.realtime.Clock;
 import javax.realtime.MemoryArea;
 import javax.realtime.RealtimeThread;
 import javax.realtime.ScopedMemory;
@@ -7,35 +9,23 @@ import javax.realtime.ScopedMemory;
 import rtsjcomponents.Context;
 import rtsjcomponents.utils.ExecuteInRunnable;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.realtime.AbsoluteTime;
-import javax.realtime.Clock;
-
 /**
  * A simple example of a periodic component.
  * @author juancol
  */
 public class MyAC implements rtsjcomponents.ActiveComponent {
     
-    public static final String RECORDS = "timeRecords-comp";
-    public static final String CASE = "-case";
-    public static final String RUN = "-run";
-    public static final String TXT = ".txt";
-    
     public static final String ID_STR = "id";
     public static final String EXAMPLE_ID_STR = "example_id";
     public static final String RUN_ID_STR = "run_id";
     
-    public static final int ITER_MULTIPLIER = 1000;
+    private static final int ITER_MULTIPLIER = MainRunnable.ITER_MULTIPLIER;
 
     private AbsoluteTime at = new AbsoluteTime();
 
-    public static final int MEASUREMENTS = 100; //Number of measurements needed
+    public static final int MEASUREMENTS = MainRunnable.MEASUREMENTS; //Number of measurements needed
+    private long times[];
 
-    private long time[] = new long[MEASUREMENTS]; //in nanosec
     private int counter = 0;
     private int iter = 0;
 
@@ -49,15 +39,14 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
     
     public void init(Context ctx) {
         // System.out.println("MyComponent.init()");
-        
         this.ctx = ctx;
 
-        // iter = component ID times multiplier
         this.id = this.ctx.getLocalInt(ID_STR);
         this.iter =  (this.id + 1) * ITER_MULTIPLIER;
         this.myPC = (MyPC) this.ctx.getComponent(Integer.toString(this.id));
         this.testcase = this.ctx.getGlobalInt(EXAMPLE_ID_STR);
         this.run = this.ctx.getGlobalInt(RUN_ID_STR);
+        this.times = MainRunnable.AC_TIMES[this.id]; // From *IMMORTAL*
     }
 
     public void execute() {
@@ -107,7 +96,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         if (counter < MEASUREMENTS) {
-            time[counter] = t1 - t0;
+            times[counter] = t1 - t0;
             counter++;
         }
    } 
@@ -122,7 +111,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         if (counter < MEASUREMENTS) {
-            time[counter] = t1 - t0;
+            times[counter] = t1 - t0;
             counter++;
         }
    }    
@@ -136,7 +125,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         if (counter < MEASUREMENTS) {
-            time[counter] = t1 - t0;
+            times[counter] = t1 - t0;
             counter++;
         }
     }
@@ -150,7 +139,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         if (counter < MEASUREMENTS) {
-            time[counter] = t1 - t0;
+            times[counter] = t1 - t0;
             counter++;
         }
     }
@@ -164,7 +153,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         if (counter < MEASUREMENTS) {
-            time[counter] = t1 - t0;
+            times[counter] = t1 - t0;
             counter++;
         }
     }
@@ -178,39 +167,14 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         if (counter < MEASUREMENTS) {
-            time[counter] = t1 - t0;
+            times[counter] = t1 - t0;
             counter++;
         }
     }
     
     public void terminate() {
         // System.out.println("MyComponent.terminate()");
-        // Write time measurements into a log
-        this.logRecords();
-
     }
-
-    private void logRecords() {
-        System.out.println ("Saving timestamps in a file ... COMPid:" + this.id + ' ' + this.counter);
-        try {
-            FileOutputStream os = 
-                new FileOutputStream(RECORDS + this.id + CASE + this.testcase + RUN + this.run + TXT);
-            PrintWriter file = new PrintWriter(os);
-            
-            System.out.println ("Here 1: " + this.id);
-            for (int i = 0; i < this.time.length; i++) {
-                file.println(i + ": " + this.time[i]);
-            }
-            System.out.println ("Here 3: " + this.id);
-            file.close();
-            System.out.println ("Here 4: " + this.id);
- 
-            System.out.println("WROTE file: " + RECORDS + this.id + CASE + this.testcase + RUN + this.run + TXT);
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e);
-        }
-    }
-
     
     /**
      * Testing logic

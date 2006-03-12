@@ -36,7 +36,7 @@ public class Example2 extends RealtimeThread
         
         try
         {
-            System.out.println("## Starting CASE:" + testcase + "RUN:" + runId);
+            System.out.println("## Starting CASE:" + testcase + " RUN:" + runId);
             ImmortalMemory imm = ImmortalMemory.instance();
             RealtimeThread rtt = (RealtimeThread) imm.newInstance(Example2.class);
             Example2.testcase = testcase;

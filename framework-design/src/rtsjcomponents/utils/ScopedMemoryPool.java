@@ -13,9 +13,9 @@ public class ScopedMemoryPool
     //  TODO Constants can be assign from a property file.
     private static final int NUM_OF_MEM_SCOPES = 50;
 
-    private static final long MIN_SCOPE_SIZE = 100 * 1024;
+    private static final long MIN_SCOPE_SIZE = 500 * 1024;
 
-    private static final long MAX_SCOPE_SIZE = 100 * 1024;
+    private static final long MAX_SCOPE_SIZE = 500 * 1024;
 
     private static Queue unusedMemoryScopes;
 

@@ -63,7 +63,7 @@ public class MainRunnable implements Runnable {
 
         PriorityScheduler ps = PriorityScheduler.instance();
         int priority = ps.getMaxPriority(RealtimeThread.currentRealtimeThread());
-        System.out.println("Max priority: " + priority);       
+        //System.out.println("Max priority: " + priority);       
 
         ActiveComponentFacade[] facades = new ActiveComponentFacade[num];
 
@@ -113,17 +113,17 @@ public class MainRunnable implements Runnable {
 
     public void run() {
         MemoryArea area = RealtimeThread.getCurrentMemoryArea();
-        //System.out.println("Executing MainRunnable.run() in " + area);
+        System.out.println("Executing MainRunnable.run() in " + area);
 
         ActiveComponentFacade[] actFacades = null;
         MyPCFacade[] pasFacades = null;
 
         try {
             pasFacades = this.createPassiveComponents(NUM_OF_PASSIVE_COMPONENTS);
-            System.out.println("  > Passive components created ...");
+            System.out.println("Passive components created ...");
             
             actFacades = this.createActiveComponents(NUM_OF_ACTIVE_COMPONENTS);
-            System.out.println("  > Active components created ...");
+            System.out.println("Active components created ...");
             
             RealtimeThread.sleep(2 * Constants.A_MINUTE);
            
@@ -138,7 +138,6 @@ public class MainRunnable implements Runnable {
                         + actFacades[i].getComponentScopeHashCode());
                 ActiveComponentFacade.freeInstance(actFacades[i]);
             }                
-                
 
             //file.println("Passive components");
             for (int i = 0; i < pasFacades.length; i++) {
@@ -158,7 +157,8 @@ public class MainRunnable implements Runnable {
             
             // Printing outpur files
             for (int i = 0; i < AC_TIMES.length; i++) {
-                MainRunnable.logRecords(AC_TIMES[i], i, Example2.testcase, Example2.runId);
+            //    System.out.println("Writing file for comp#: " + i);
+                this.logRecords(AC_TIMES[i], i, Example2.testcase, Example2.runId);
             }
             
         } catch (Exception e) {
@@ -167,8 +167,7 @@ public class MainRunnable implements Runnable {
         }
     }
     
-    static private void logRecords(long times[], int compId, int testcase, int run) {
-        //System.out.println ("Saving timestamps in a file ... COMPid:" + compId);
+    private void logRecords(long times[], int compId, int testcase, int run) {
         try {
             FileOutputStream os = 
                 new FileOutputStream(RECORDS + compId + CASE + testcase + RUN + run + TXT);
@@ -178,10 +177,8 @@ public class MainRunnable implements Runnable {
                 file.println(i + ": " + times[i]);
             }
             file.close();
-            //System.out.println("WROTE file: " + RECORDS + compId + CASE + testcase + RUN + run + TXT);
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e);
         }
     }
-    
 }

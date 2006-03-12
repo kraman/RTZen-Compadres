@@ -31,17 +31,15 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
     
     public static final int ITER_MULTIPLIER = 1000;
 
-    public static final AbsoluteTime at = new AbsoluteTime();
+    private AbsoluteTime at = new AbsoluteTime();
 
     public static final int MEASUREMENTS = 100; //Number of measurements needed
 
-    public final long time[] = new long[MEASUREMENTS]; //in nanosec
-
+    private long time[] = new long[MEASUREMENTS]; //in nanosec
     private int counter = 0;
+    private int iter = 0;
 
-    int iter = 0;
-
-    Context ctx = null;
+    private Context ctx = null;
 
     private int id;
     private MyPC myPC;    
@@ -193,15 +191,21 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
     }
 
     private void logRecords() {
-        //System.out.println ("Saving timestamps in a file ...");
+        System.out.println ("Saving timestamps in a file ... COMPid:" + this.id + ' ' + this.counter);
         try {
             FileOutputStream os = 
                 new FileOutputStream(RECORDS + this.id + CASE + this.testcase + RUN + this.run + TXT);
             PrintWriter file = new PrintWriter(os);
-            for (int i = 0; i < time.length; i++) {
-                file.println(i + ": " + time[i]);
+            
+            System.out.println ("Here 1: " + this.id);
+            for (int i = 0; i < this.time.length; i++) {
+                file.println(i + ": " + this.time[i]);
             }
+            System.out.println ("Here 3: " + this.id);
             file.close();
+            System.out.println ("Here 4: " + this.id);
+ 
+            System.out.println("WROTE file: " + RECORDS + this.id + CASE + this.testcase + RUN + this.run + TXT);
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e);
         }

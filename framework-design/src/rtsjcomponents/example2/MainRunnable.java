@@ -24,13 +24,13 @@ public class MainRunnable implements Runnable {
     
     public static final int BASE_PERIOD = 1;
     public static final int BASE_DEADLINE = 1;
-    public static final int NUM_OF_ACTIVE_COMPONENTS = 5;
-    public static final int NUM_OF_PASSIVE_COMPONENTS = 5;
+    public static final int NUM_OF_ACTIVE_COMPONENTS = 3;//5;
+    public static final int NUM_OF_PASSIVE_COMPONENTS = 3;//5;
     public static final int NUM_OF_RUNNABLES_PER_PASSIVE_COMPONENTS = 10;
     public static final int NUM_OF_STATELESS_PASSIVE_COMPONENT_IMPLS = 10;
 
     public static final MyPC[] myPCFacades = new MyPC[MainRunnable.NUM_OF_PASSIVE_COMPONENTS];
-    public static final int UNIT_PERIOD = 250; // miliseconds
+    public static final int UNIT_PERIOD = 500;//250; // miliseconds
   
     /**
      * Creates a set of active components
@@ -50,7 +50,7 @@ public class MainRunnable implements Runnable {
 
         PriorityScheduler ps = PriorityScheduler.instance();
         int priority = ps.getMaxPriority(RealtimeThread.currentRealtimeThread());
-       
+        System.out.println("Max priority: " + priority);       
 
         ActiveComponentFacade[] facades = new ActiveComponentFacade[num];
 
@@ -65,7 +65,7 @@ public class MainRunnable implements Runnable {
             
             long p = (i + 1) * UNIT_PERIOD; // in miliseconds
             RelativeTime period = new RelativeTime(p, 0);
-            RelativeTime cost = new RelativeTime(p/2, 0);
+            RelativeTime cost = new RelativeTime(p, 0);
             RelativeTime deadline = new RelativeTime(p, 0);
             MemoryParameters memoryParams = new MemoryParameters(MemoryParameters.NO_MAX, MemoryParameters.NO_MAX);
 
@@ -112,38 +112,37 @@ public class MainRunnable implements Runnable {
             actFacades = this.createActiveComponents(NUM_OF_ACTIVE_COMPONENTS);
             System.out.println("Active components created ...");
             
-            RealtimeThread.sleep(2* Constants.A_MINUTE);
-            
-            // System.out.println ("Saving timestamps in a file ...");
-            
+            RealtimeThread.sleep(2 * Constants.A_MINUTE);
+           
+ 
             FileOutputStream os = new FileOutputStream("component-memscopes-hashcodes.txt");
             PrintWriter file = new PrintWriter(os);
             
-//            try {
-                file.println("Active components");
-                for (int i = 0; i < actFacades.length; i++) {
-                    //System.out.println("active facade #: " + i);
-                    file.println("Active component id:" + i + ' ' 
-                            + actFacades[i].getComponentScopeHashCode());
-                    ActiveComponentFacade.freeInstance(actFacades[i]);
-                }                
+            //file.println("Active components");
+            for (int i = 0; i < actFacades.length; i++) {
+                //System.out.println("active facade #: " + i);
+                file.println("Active component id:" + i + ' ' 
+                        + actFacades[i].getComponentScopeHashCode());
+                ActiveComponentFacade.freeInstance(actFacades[i]);
+            }                
                 
 
-                file.println("Passive components");
-                for (int i = 0; i < pasFacades.length; i++) {
-                    file.println("Passive component id:" + i + ' ' 
-                            + pasFacades[i].getComponentScopeHashCode());
-                    //System.out.println("passive facade #: " + i);
-                    //System.out.println("Mamory area of passive facade #: " + i + " is " + 
-                    //    MemoryArea.getMemoryArea(pasFacades[i]));
-                    MyPCFacade.freeInstance(pasFacades[i]);
-                }
+            //file.println("Passive components");
+            for (int i = 0; i < pasFacades.length; i++) {
+                file.println("Passive component id:" + i + ' ' 
+                        + pasFacades[i].getComponentScopeHashCode());
+                //System.out.println("passive facade #: " + i);
+                //System.out.println("Memory area of passive facade #: " + i + " is " + 
+                //    MemoryArea.getMemoryArea(pasFacades[i]));
+                MyPCFacade.freeInstance(pasFacades[i]);
+            }
             
             file.close();
             
             // During this time we let the components terminate.
             // We had to do this because of a Timesys RTSJ-RI's bug.
-            RealtimeThread.sleep(20 * Constants.A_SECOND);
+            RealtimeThread.sleep(1 * Constants.A_MINUTE);
+   
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);

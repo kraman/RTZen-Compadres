@@ -15,4 +15,6 @@ public interface MyPC extends PassiveComponent{
     int execSDM_0(int i);
     
     Integer execSDM_1(int i);
+    
+    Integer execSDM_2(int i);    
 }

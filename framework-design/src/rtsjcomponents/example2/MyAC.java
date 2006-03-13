@@ -79,7 +79,9 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         case 5:
             this.executeCase5();
             break;            
-            
+        case 6:
+            this.executeCase6();
+            break;               
         default:
             System.err.println("Invalid testcase number");
             System.exit(-1); // pedant
@@ -171,6 +173,23 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
             counter++;
         }
     }
+    
+    /**
+        Test for serialization
+    */
+    private void executeCase6() {
+        Clock.getRealtimeClock().getTime(at);
+        long t0 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
+        
+        Integer i = this.myPC.execSDM_2(this.iter);
+        
+        Clock.getRealtimeClock().getTime(at);
+        long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
+        if (counter < MEASUREMENTS) {
+            times[counter] = t1 - t0;
+            counter++;
+        }
+    }    
     
     public void terminate() {
         // System.out.println("MyComponent.terminate()");

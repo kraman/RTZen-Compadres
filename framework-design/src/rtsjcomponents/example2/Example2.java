@@ -21,12 +21,12 @@ public class Example2 extends RealtimeThread
     {
         if (args.length < 1 || args.length > 2) {
             System.err.println("Usage: tjvm ... rtsjcomponents.Example2 'case#' 'run#'");
-            System.err.println("case#=(0,1,2,3,4,5) and run#>=0");
+            System.err.println("case#=(0,1,2,3,4,5,6) and run#>=0");
         }
         
         int testcase = Integer.parseInt(args[0]);
-        if (testcase < 0 || testcase > 5) {
-            throw new IllegalArgumentException("argument must be [0,5]");
+        if (testcase < 0 || testcase > 6) {
+            throw new IllegalArgumentException("argument must be [0,6]");
         }
 
         int runId = 0;

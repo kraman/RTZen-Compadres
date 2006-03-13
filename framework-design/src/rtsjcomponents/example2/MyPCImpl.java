@@ -2,6 +2,7 @@ package rtsjcomponents.example2;
 
 import rtsjcomponents.Context;
 import rtsjcomponents.example2.MyAC;
+import java.util.*;
 
 public class MyPCImpl implements MyPC {
     
@@ -37,5 +38,22 @@ public class MyPCImpl implements MyPC {
         return new Integer(i);
     }
 
-
+    public Integer execSDM_2(int i) {
+        // TODO Access the state of the component
+        MyAC.doWork(i);
+        //return new Integer(i);
+        try{
+            java.lang.reflect.Constructor integerConstructor = Integer.class
+                    .getConstructor(new Class [] {int.class});
+            Object [] integerArgTypes = new Object[1];
+            integerArgTypes[0] = new Integer(i);        
+        
+            return (Integer) javax.realtime.ImmortalMemory.instance().newInstance(
+                    integerConstructor, integerArgTypes);  
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
 }

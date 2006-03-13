@@ -180,7 +180,27 @@ public class MyPCFacade implements MyPC{
         
         return r;
     }
-    
+ 
+    public Integer execSDM_2(int i) {
+        
+        ScopedMemory currentScope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
+        
+        // Obtain the component scope which is parent of the current scope.
+        ScopedMemory compScope = (ScopedMemory) 
+            RealtimeThread.getOuterMemoryArea(RealtimeThread.getMemoryAreaStackDepth() - 2);
+
+        MyPCRunnable csir = new MyPCRunnable();
+        currentScope.setPortal(csir);
+        
+        csir.prepareForExecSDM_2(i, compScope);
+        ExecutorInArea.executeInArea(csir, this.stateScope, true);
+        
+        Integer r = (Integer) csir.getReturnValueStatic();
+       
+        currentScope.setPortal(null);
+        
+        return r;
+    }
     
     public void init(Context ctx) {
         throw Errors.NO_SUCH_METHOD_ERROR;

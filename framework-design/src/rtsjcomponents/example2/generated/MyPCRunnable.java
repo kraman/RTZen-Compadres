@@ -28,6 +28,8 @@ public class MyPCRunnable implements Runnable {
 
     static final int DO_execSDM_1 = 5;
 
+    static final int DO_execSDM_2 = 6;    
+    
     /** Indicates the operation to be executed */
     private int operation = ILLEGAL_OP;
 
@@ -44,6 +46,7 @@ public class MyPCRunnable implements Runnable {
     private long   longRetValue;
     private char   charRetValue;
     private Object returnValue;
+    private static Object returnValueStatic;
     
     private Throwable t;
 
@@ -67,7 +70,10 @@ public class MyPCRunnable implements Runnable {
         case DO_execSDM_1:
             this.DoExecSDM_1();
             break;
-
+        case DO_execSDM_2:
+            this.DoExecSDM_2();
+            break;
+            
         default:
             System.out.println(this.getClass().getName()
                     + " ILLEGAL OPERATION: it must be prepare first.");
@@ -185,7 +191,46 @@ public class MyPCRunnable implements Runnable {
             
             Queue pool = portal.getPoolOfInternalRunnables();
             InternalRunnable internalRun = (InternalRunnable) pool.dequeue();    
-            internalRun.init(impl, targetScope, this.compScope, this.intArg_0);
+            internalRun.init(impl, targetScope, this.compScope, 
+                    this.intArg_0, DO_execSDM_1);
+            tmpScope.enter(internalRun);
+            pool.enqueue(internalRun);
+            ScopedMemoryPool.freeInstance(tmpScope);
+        }
+        finally {
+            this.resetOperationCode();
+        }
+    }
+
+    public void prepareForExecSDM_2(final int i, final ScopedMemory compScope) {
+        this.operation = DO_execSDM_2;
+        this.intArg_0 = i;
+        this.compScope = compScope;
+    }
+    
+    private void DoExecSDM_2() {
+        
+        try {
+            ScopedMemory scope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
+            final MyPCPortal portal = (MyPCPortal) scope.getPortal();
+            final MyPCImpl impl = portal.getImpl();
+            
+            final ScopedMemory tmpScope = ScopedMemoryPool.getInstance();
+
+            if (tmpScope == null){
+                System.err.println("tmpScope is null.");
+                System.exit(-1); // pedant
+            }
+            
+            ScopedMemory targetScope =
+                (ScopedMemory) MemoryArea.getMemoryArea(this);            
+            
+            // Get it from a pool in the passive component scope
+            
+            Queue pool = portal.getPoolOfInternalRunnables();
+            InternalRunnable internalRun = (InternalRunnable) pool.dequeue();    
+            internalRun.init(impl, targetScope, this.compScope, 
+                    this.intArg_0, DO_execSDM_2);
             tmpScope.enter(internalRun);
             pool.enqueue(internalRun);
             ScopedMemoryPool.freeInstance(tmpScope);
@@ -201,20 +246,32 @@ public class MyPCRunnable implements Runnable {
         private ScopedMemory targetScope;
         private ScopedMemory compScope;
         private int intArg_0;
+        private int operation;
+        private MyPCRunnable run;
         
-        public void init(final MyPCImpl impl, final ScopedMemory targetScope, final ScopedMemory compScope, final int arg){
+        public void init(final MyPCImpl impl, final ScopedMemory targetScope, 
+                final ScopedMemory compScope, final int arg,
+                final int operation){
             this.myImpl = impl;
             this.targetScope = targetScope;
             this.compScope = compScope;
             this.intArg_0 = arg;
+            this.operation = operation;
         }
         
         public void run() {
-            Integer r = this.myImpl.execSDM_1(this.intArg_0);
-            MyPCRunnable dummy = new MyPCRunnable();
-            dummy.compScope = this.compScope;
-            dummy.returnValue(r, targetScope);  
             
+            Integer r = null;
+            if(operation == DO_execSDM_1){
+                r = this.myImpl.execSDM_1(this.intArg_0);
+                MyPCRunnable dummy = new MyPCRunnable();
+                dummy.compScope = this.compScope;
+                dummy.returnValue(r, targetScope);                  
+                
+            } else {
+                //System.out.println("test case 6");
+                MyPCRunnable.setReturnValueStatic(this.myImpl.execSDM_2(this.intArg_0));
+            }
         }
     }
     
@@ -304,6 +361,23 @@ public class MyPCRunnable implements Runnable {
         return this.t;
     }
 
+    /**
+     * @return Returns the returnValue.
+     */
+    public static Object getReturnValueStatic()
+    {
+        return returnValueStatic;
+    }
+
+    /** 
+     * @param returnValue The returnValue to set.
+     */
+    static void setReturnValueStatic(Object returnValueStatic)
+    {
+        returnValueStatic = returnValueStatic;
+    }    
+    
+    
     /**
      * @return Returns the returnValue.
      */

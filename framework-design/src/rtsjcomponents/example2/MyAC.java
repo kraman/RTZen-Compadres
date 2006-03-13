@@ -6,6 +6,7 @@ import javax.realtime.MemoryArea;
 import javax.realtime.RealtimeThread;
 import javax.realtime.ScopedMemory;
 
+import rtsjcomponents.utils.IntHolder;
 import rtsjcomponents.Context;
 import rtsjcomponents.utils.ExecuteInRunnable;
 
@@ -181,7 +182,7 @@ public class MyAC implements rtsjcomponents.ActiveComponent {
         Clock.getRealtimeClock().getTime(at);
         long t0 = at.getNanoseconds() + at.getMilliseconds() * 1000000;
         
-        Integer i = this.myPC.execSDM_2(this.iter);
+        IntHolder i = this.myPC.execSDM_2(this.iter);
         
         Clock.getRealtimeClock().getTime(at);
         long t1 = at.getNanoseconds() + at.getMilliseconds() * 1000000;

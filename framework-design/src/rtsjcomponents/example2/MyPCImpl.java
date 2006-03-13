@@ -1,8 +1,7 @@
 package rtsjcomponents.example2;
-
+import rtsjcomponents.utils.IntHolder;
 import rtsjcomponents.Context;
 import rtsjcomponents.example2.MyAC;
-import java.util.*;
 
 public class MyPCImpl implements MyPC {
     
@@ -38,10 +37,22 @@ public class MyPCImpl implements MyPC {
         return new Integer(i);
     }
 
-    public Integer execSDM_2(int i) {
+    public IntHolder execSDM_2(int i) {
         // TODO Access the state of the component
         MyAC.doWork(i);
-        //return new Integer(i);
+        IntHolder ih = null;
+        
+        try{
+            ih = (IntHolder) javax.realtime.ImmortalMemory.instance()
+                .newInstance(IntHolder.class);
+            ih.setVal(i);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return ih;
+        
+        /*
         try{
             java.lang.reflect.Constructor integerConstructor = Integer.class
                     .getConstructor(new Class [] {int.class});
@@ -54,6 +65,7 @@ public class MyPCImpl implements MyPC {
             e.printStackTrace();
         }
         return null;
+        */
     }
     
 }

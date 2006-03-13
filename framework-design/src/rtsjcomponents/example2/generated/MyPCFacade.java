@@ -5,6 +5,7 @@ import javax.realtime.MemoryArea;
 import javax.realtime.RealtimeThread;
 import javax.realtime.ScopedMemory;
 
+import rtsjcomponents.utils.IntHolder;
 import rtsjcomponents.Context;
 import rtsjcomponents.example2.MainRunnable;
 import rtsjcomponents.example2.MyPC;
@@ -181,7 +182,7 @@ public class MyPCFacade implements MyPC{
         return r;
     }
  
-    public Integer execSDM_2(int i) {
+    public IntHolder execSDM_2(int i) {
         
         ScopedMemory currentScope = (ScopedMemory) RealtimeThread.getCurrentMemoryArea();
         
@@ -195,7 +196,7 @@ public class MyPCFacade implements MyPC{
         csir.prepareForExecSDM_2(i, compScope);
         ExecutorInArea.executeInArea(csir, this.stateScope, true);
         
-        Integer r = (Integer) csir.getReturnValueStatic();
+        IntHolder r = (IntHolder) csir.getReturnValueStatic();
        
         currentScope.setPortal(null);
         

@@ -1,6 +1,7 @@
 package rtsjcomponents.example2;
 
 import rtsjcomponents.PassiveComponent;
+import rtsjcomponents.utils.IntHolder;
 
 /**
  * Defines the business methods of the passive component
@@ -16,5 +17,5 @@ public interface MyPC extends PassiveComponent{
     
     Integer execSDM_1(int i);
     
-    Integer execSDM_2(int i);    
+    IntHolder execSDM_2(int i);    
 }

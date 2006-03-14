@@ -14,6 +14,7 @@ import rtsjcomponents.utils.ObjectHolder;
 import rtsjcomponents.utils.Queue;
 import rtsjcomponents.utils.ScopedMemoryPool;
 import rtsjcomponents.utils.WedgeRunnable;
+import rtsjcomponents.utils.IntHolder;
 
 public class MyPCRunnable implements Runnable {
 
@@ -46,7 +47,6 @@ public class MyPCRunnable implements Runnable {
     private long   longRetValue;
     private char   charRetValue;
     private Object returnValue;
-    private static Object returnValueStatic;
     
     private Throwable t;
 
@@ -270,7 +270,10 @@ public class MyPCRunnable implements Runnable {
                 
             } else {
                 //System.out.println("test case 6");
-                MyPCRunnable.setReturnValueStatic(this.myImpl.execSDM_2(this.intArg_0));
+                MyPCFacade.setIntHolderVal(this.myImpl.execSDM_2(this.intArg_0).getVal());
+                
+                //intHolder.setVal();
+                //MyPCRunnable.this.setReturnValue(ih);
             }
         }
     }
@@ -361,23 +364,6 @@ public class MyPCRunnable implements Runnable {
         return this.t;
     }
 
-    /**
-     * @return Returns the returnValue.
-     */
-    public static Object getReturnValueStatic()
-    {
-        return returnValueStatic;
-    }
-
-    /** 
-     * @param returnValue The returnValue to set.
-     */
-    static void setReturnValueStatic(Object returnValueStatic)
-    {
-        returnValueStatic = returnValueStatic;
-    }    
-    
-    
     /**
      * @return Returns the returnValue.
      */

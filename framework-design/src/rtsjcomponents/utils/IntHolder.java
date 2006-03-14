@@ -2,7 +2,13 @@ package rtsjcomponents.utils;
 
 public class IntHolder
 {
-    public IntHolder(){};
+    public IntHolder(){
+        this.val = 0;
+    }
+
+    public IntHolder(int val){
+        this.val = val;
+    }
     
     private int val = 0;
     

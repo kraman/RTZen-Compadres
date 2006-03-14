@@ -29,6 +29,7 @@ public class MyPCFacade implements MyPC{
     private static Queue poolOfProxies;
     private static Queue poolOfRunnables;
     private static Queue poolOfCompImpl;
+    private static IntHolder intHolder;
     // TODO How to manage runnables, sychro, etc.?
 
     // Static block for creating pools in immortal memory.
@@ -51,6 +52,10 @@ public class MyPCFacade implements MyPC{
                 // initialize the instances correctly
                 poolOfCompImpl.enqueue(c);
             }
+            
+            intHolder = (IntHolder) javax.realtime.ImmortalMemory.instance()
+                .newInstance(IntHolder.class);
+            
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -196,7 +201,7 @@ public class MyPCFacade implements MyPC{
         csir.prepareForExecSDM_2(i, compScope);
         ExecutorInArea.executeInArea(csir, this.stateScope, true);
         
-        IntHolder r = (IntHolder) csir.getReturnValueStatic();
+        IntHolder r = getIntHolder();
        
         currentScope.setPortal(null);
         
@@ -219,5 +224,18 @@ public class MyPCFacade implements MyPC{
         
         return this.stateScope.hashCode();
     }
+    
+    /**
+     * @return Returns the returnValue.
+     */
+    public static IntHolder getIntHolder()
+    {
+        return intHolder;
+    }
+
+    public static void setIntHolderVal(int val)
+    {
+        intHolder.setVal(val);
+    }      
 }
 

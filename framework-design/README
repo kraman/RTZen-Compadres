@@ -1,0 +1,28 @@
+RTSJ Component Framework 
+Developed as part of COMPADRES project (NSF Grant No. 0410218)
+at UCI-DOC Lab.
+March, 2006.
+
+README
+
+This file briefly describes the content of the "framework-design" directory 
+which includes files created for the design of the RTSJ component framework.
+
+* framework-design/src/
+Contains the source code that guides the design of the framework.
+
+* framework-design/scripts/ 
+Contains shell scripts for running some tests for measure overhead and 
+predictability using RTSJ-RI and jRate.
+
+* framework-design/build.xml
+Ant file for compiling the source code for RTSJ-RI.
+
+* framework-design/Makefile
+Make file for compiling the source code for jRate.
+
+* framework-design/util/iSoLeak/
+Contains the IsoLeak tool that helps detect memory leaks in RTSJ systems.
+=============================================================================
+For comments and suggestions: 
+    {juancol,shruti,mpanahi,klefstad}@doc.ece.uci.edu

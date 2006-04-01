@@ -9,8 +9,9 @@
     <property name="src" location="${project}/src"/>
     <property name="bin" location="${project}/bin"/>
     <property name="rtsj-lib" location="/opt/timesys/rtsj-ri/lib/foundation.jar"/>
+    <property name="jar-name" location="${project}/compadres.jar"/>
 	
-	<!-- target: default -->
+    <!-- target: default -->
     <target name="default" depends="" description="Compile all examples">
        <mkdir dir="${project}/bin"/>
        <javac srcdir="${src}"
@@ -23,25 +24,22 @@
       <antcall target="lib"/>
     </target>
 
+    <!-- We generate this jar file to apply iSoLeak on it, it is not needed
+         to run the scripts.
+    -->
     <target name="lib">
         <jar
-        jarfile="compadres.jar"
+        jarfile="${jar-name}"
         basedir="${project}/bin"
         includes="**"
         />
     </target>
 
-	<!-- target: default -->
+    <!-- target: default -->
     <target name="clean" depends="" description="Delete class files">
        <delete dir="${project}/bin"/>
+       <delete file="${jar-name}"/>
     </target>	
 	
-    <!--  target: run >
-    <target name="run-Ex1"  description="Run Example 1">
-    	<exec executable="/opt/timesys/rtsj-ri/bin/tjvm  
-    	-Djava.class.path=/home/shruti/compadres/framework-design/bin -Xbootclasspath=${rtsj-lib}/foundation.jar
-    		rtsjcomponents.example1.Example1">
-        </exec>
-    </target-->
 </project>
 

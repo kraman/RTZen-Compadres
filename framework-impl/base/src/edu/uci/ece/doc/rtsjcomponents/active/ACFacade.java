@@ -1,20 +1,10 @@
 package edu.uci.ece.doc.rtsjcomponents.active;
 
-import javax.realtime.AperiodicParameters;
-import javax.realtime.AsyncEventHandler;
-import javax.realtime.MemoryArea;
 import javax.realtime.MemoryParameters;
-import javax.realtime.NoHeapRealtimeThread;
-import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
-import javax.realtime.RealtimeThread;
 import javax.realtime.RelativeTime;
-import javax.realtime.ReleaseParameters;
 import javax.realtime.ScopedMemory;
-import javax.realtime.SporadicParameters;
 
-import edu.uci.ece.doc.rtsjcomponents.utils.Constants;
-import edu.uci.ece.doc.rtsjcomponents.utils.ExecuteInRunnable;
 import edu.uci.ece.doc.rtsjcomponents.utils.ExecutorInArea;
 import edu.uci.ece.doc.rtsjcomponents.utils.Queue;
 import edu.uci.ece.doc.rtsjcomponents.utils.ScopedMemoryPool;

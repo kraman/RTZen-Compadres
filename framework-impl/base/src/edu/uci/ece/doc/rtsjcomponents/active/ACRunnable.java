@@ -5,9 +5,9 @@ import javax.realtime.ScopedMemory;
 
 import edu.uci.ece.doc.rtsjcomponents.ActiveComponent;
 //import rtsjcomponents.example2.MainRunnable;
-import edu.uci.ece.doc.rtsjcomponents.utils.ObjectHolder;
+//import edu.uci.ece.doc.rtsjcomponents.utils.ObjectHolder;
 import edu.uci.ece.doc.rtsjcomponents.utils.ScopedMemoryPool;
-import edu.uci.ece.doc.rtsjcomponents.utils.TempScopePortal;
+//import edu.uci.ece.doc.rtsjcomponents.utils.TempScopePortal;
 
 public class ACRunnable implements Runnable {
     

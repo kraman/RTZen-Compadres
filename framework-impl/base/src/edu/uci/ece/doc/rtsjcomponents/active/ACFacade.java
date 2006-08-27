@@ -98,8 +98,8 @@ public class ACFacade
         
         tmpScope.enter(new Runnable(){
            public void run() {
-               ACXInvocationRunnable crossScopeInvocator = 
-                   new ACXInvocationRunnable();
+               ACXScopeInvocationRunnable crossScopeInvocator = 
+                   new ACXScopeInvocationRunnable();
                  
                crossScopeInvocator.prepareForCreatePeriodicComponent(scheduling, start, period, 
                        cost, deadline, memory, componentClass, id); // key method
@@ -128,8 +128,8 @@ public class ACFacade
         
         tmpScope.enter(new Runnable(){
            public void run() {
-               ACXInvocationRunnable crossScopeInvocator = 
-                   new ACXInvocationRunnable();
+               ACXScopeInvocationRunnable crossScopeInvocator = 
+                   new ACXScopeInvocationRunnable();
                  
                crossScopeInvocator.prepareForCreateAperiodicComponent(scheduling, cost, deadline,
                        memory, componentClass, key); // key method
@@ -160,8 +160,8 @@ public class ACFacade
         
         tmpScope.enter(new Runnable(){
            public void run() {
-               ACXInvocationRunnable crossScopeInvocator = 
-                   new ACXInvocationRunnable();
+               ACXScopeInvocationRunnable crossScopeInvocator = 
+                   new ACXScopeInvocationRunnable();
                  
                crossScopeInvocator.prepareForCreateSporadicComponent(scheduling, minInterarrival, 
                      cost, deadline, memory, componentClass, key); // key method
@@ -188,8 +188,8 @@ public class ACFacade
         
         tmpScope.enter(new Runnable(){
            public void run() {
-               ActiveComponentCrossScopeInvocationRunnable crossScopeInvocator = 
-                   new ActiveComponentCrossScopeInvocationRunnable();
+               ACXScopeInvocationRunnable crossScopeInvocator = 
+                   new ACXScopeInvocationRunnable();
                crossScopeInvocator.prepareForTerminate(); // key method
                ExecutorInArea.executeInArea(crossScopeInvocator, workingScope, true);               
            }

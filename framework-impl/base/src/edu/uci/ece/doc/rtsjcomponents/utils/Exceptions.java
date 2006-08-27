@@ -1,4 +1,4 @@
-package rtsjcomponents.utils;
+package edu.uci.ece.doc.rtsjcomponents.utils;
 
 /**
  * Collection of constant exceptions created in immortal memory.

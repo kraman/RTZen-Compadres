@@ -1,4 +1,4 @@
-package rtsjcomponents.utils;
+package edu.uci.ece.doc.rtsjcomponents.utils;
 
 import javax.realtime.ScopedMemory;
 

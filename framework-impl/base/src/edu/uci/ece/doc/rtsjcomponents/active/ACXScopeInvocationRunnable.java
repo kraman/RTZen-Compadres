@@ -21,7 +21,7 @@ import edu.uci.ece.doc.rtsjcomponents.utils.ExecuteInRunnable;
  * @author juancol
  *
  */
-public class ACXInvocationRunnable implements Runnable
+public class ACXScopeInvocationRunnable implements Runnable
 {
     // Operation codes
     private static final int ILLEGAL_OP          = -1;
@@ -55,7 +55,7 @@ public class ACXInvocationRunnable implements Runnable
     private Throwable t = null;
     
     /** Package constructor */
-    public ACXInvocationRunnable() { }
+    public ACXScopeInvocationRunnable() { }
     
     /* @see java.lang.Runnable#run() */
     public void run()

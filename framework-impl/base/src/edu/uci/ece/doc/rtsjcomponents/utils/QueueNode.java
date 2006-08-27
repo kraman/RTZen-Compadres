@@ -1,6 +1,6 @@
 // This class should be an internal class but TJVM does not 
 // support inner classes well. Just for now is default.
-package rtsjcomponents.utils;
+package edu.uci.ece.doc.rtsjcomponents.utils;
 
 /**
  * Internal node of the linked list.
